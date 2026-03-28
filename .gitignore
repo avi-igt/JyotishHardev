@@ -1,0 +1,21 @@
+# Secrets
+.env
+*.env.local
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+dist/
+*.egg-info/
+.pytest_cache/
+
+# Node
+node_modules/
+.next/
+.expo/
+
+# OS
+.DS_Store

@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:registry.npmjs.org)",
+      "Bash(npm install:*)",
+      "Bash(npm view:*)",
+      "Bash(python3 -c \"import sys,json; v=json.load\\(sys.stdin\\); print\\([x for x in v if x.startswith\\(''''18''''\\)][-5:]\\)\")",
+      "Bash(npx tsc:*)",
+      "Bash(npx next:*)",
+      "Bash(pip3 install:*)",
+      "Bash(python3:*)",
+      "Bash(npm run:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}

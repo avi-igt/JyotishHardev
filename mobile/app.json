@@ -1,0 +1,45 @@
+{
+  "expo": {
+    "name": "JyotishHardev",
+    "slug": "jyotishhardev",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#F5F0E8"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.jyotishhardev.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#F5F0E8"
+      },
+      "package": "com.jyotishhardev.app"
+    },
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notification-icon.png",
+          "color": "#1B1F4A",
+          "sounds": []
+        }
+      ]
+    ],
+    "extra": {
+      "apiBaseUrl": "http://192.168.1.64:8000",
+      "supabaseUrl": "https://kdeinjziykangijahlus.supabase.co",
+      "supabaseAnonKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtkZWluanppeWthbmdpamFobHVzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxOTk1ODIsImV4cCI6MjA4OTc3NTU4Mn0.YuOkoNDbv3VLln8wL4VPfQnKIbuJDWXO3LveVd3znlw",
+      "googlePlacesApiKey": "AIzaSyDpVxBYTqKViRGIKIzz8rshpTq8arCXz04"
+    }
+  }
+}
