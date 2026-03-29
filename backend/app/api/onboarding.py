@@ -84,23 +84,26 @@ class MeResponse(BaseModel):
 # ─── Background: prediction generation ─────────────────────────────────────────
 
 
-def _generate_predictions_background(profile_id: str, db: Session) -> None:
-    """Async background task: generate predictions via LLM for all Dasha periods.
+def _generate_predictions_background(profile_id: str) -> None:
+    """Background task: generate predictions via LLM for all Dasha periods.
 
-    Called after onboarding. Updates generation_status on completion.
-    Non-blocking — the profile/kundali endpoint returns before this finishes.
+    Opens its own DB session — never reuses the request session, which is
+    closed by the time this task runs.
     """
     from app.services.predictions import generate_predictions_for_profile
+    from app.core.db import SessionLocal
 
+    db = SessionLocal()
     try:
         generate_predictions_for_profile(db, profile_id)
     except Exception:
-        # Log but do not crash — generation status will remain "failed"
         db.rollback()
         kundali = db.query(Kundali).filter(Kundali.profile_id == profile_id).first()
         if kundali:
             kundali.generation_status = GenerationStatus.failed
             db.commit()
+    finally:
+        db.close()
 
 
 # ─── Routes ────────────────────────────────────────────────────────────────────
@@ -191,7 +194,7 @@ def create_profile(
     db.refresh(kundali)
 
     # Queue prediction generation (non-blocking)
-    background_tasks.add_task(_generate_predictions_background, user_id, db)
+    background_tasks.add_task(_generate_predictions_background, user_id)
 
     return OnboardingResponse(profile=profile, kundali=kundali)
 
