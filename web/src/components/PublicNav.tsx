@@ -4,6 +4,7 @@
  */
 import Link from 'next/link';
 import { useState } from 'react';
+import Logo from './Logo';
 
 interface PublicNavProps {
   activePage?: string;
@@ -33,8 +34,8 @@ export default function PublicNav({ activePage }: PublicNavProps) {
         boxSizing: 'border-box',
       }}>
         {/* Brand */}
-        <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
-          <span style={{ fontSize: 22, color: '#c9a84c' }}>⊕</span>
+        <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
+          <Logo size={30} color="#c9a84c" />
           <span style={{
             fontSize: 16, fontWeight: 600, color: '#ffffff',
             fontFamily: "'Tiro Devanagari Hindi', Georgia, serif",
