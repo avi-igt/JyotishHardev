@@ -2,7 +2,9 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import { supabase } from '@/lib/supabase';
+import { api } from '@/lib/api';
 
 const SignupPage: NextPage = () => {
   const [email, setEmail] = useState('');
@@ -11,6 +13,7 @@ const SignupPage: NextPage = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,7 +30,7 @@ const SignupPage: NextPage = () => {
 
     setLoading(true);
 
-    const { error: signUpError } = await supabase.auth.signUp({ email, password });
+    const { data, error: signUpError } = await supabase.auth.signUp({ email, password });
 
     if (signUpError) {
       setError(signUpError.message);
@@ -35,6 +38,18 @@ const SignupPage: NextPage = () => {
       return;
     }
 
+    // If session returned immediately (email confirmation disabled), go straight to app
+    if (data.session) {
+      try {
+        await api.getMe();
+        router.push('/dashboard');
+      } catch {
+        router.push('/onboarding');
+      }
+      return;
+    }
+
+    // Email confirmation required — show check-email screen
     setDone(true);
     setLoading(false);
   };
