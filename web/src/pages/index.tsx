@@ -219,8 +219,9 @@ const HomePage: NextPage = () => {
     }
   };
 
-  // Load Google Places
+  // Load Google Places — only after auth check is done (form must be rendered for pobRef to exist)
   useEffect(() => {
+    if (authLoading) return;
     const key = process.env.NEXT_PUBLIC_GOOGLE_PLACES_KEY;
     if (!key || document.getElementById('gmaps-script')) return;
 
@@ -250,7 +251,7 @@ const HomePage: NextPage = () => {
     script.src = `https://maps.googleapis.com/maps/api/js?key=${key}&libraries=places&callback=initPlaces`;
     script.async = true;
     document.head.appendChild(script);
-  }, []);
+  }, [authLoading]);
 
   const canSubmit = name.trim() && day && month && year && pob && pobLat !== null && pobLon !== null && pobTzOffset !== null && !loading;
 
