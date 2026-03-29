@@ -1,6 +1,7 @@
 """Vedic chart computation using pyswisseph.
 
 Planetary positions are computed mathematically — never by LLM.
+Uses sidereal zodiac with Lahiri ayanamsha (standard for Vedic astrology).
 """
 from datetime import date, time, datetime
 from typing import Optional
@@ -30,6 +31,11 @@ VIMSHOTTARI_SEQUENCE = [
 ]
 
 
+def _sidereal_lon(tropical_lon: float, ayanamsha: float) -> float:
+    """Convert tropical longitude to sidereal by subtracting Lahiri ayanamsha."""
+    return (tropical_lon - ayanamsha) % 360
+
+
 def compute_chart(
     dob: date,
     tob: Optional[time],
@@ -37,7 +43,9 @@ def compute_chart(
     lon: float,
     timezone_offset: float,
 ) -> dict:
-    """Compute natal chart. If tob is None, defaults to noon (with disclaimer flag)."""
+    """Compute natal Vedic chart using sidereal (Lahiri) zodiac.
+    If tob is None, defaults to noon (with disclaimer flag).
+    """
     if tob is None:
         hour = 12.0
         tob_unknown = True
@@ -49,19 +57,25 @@ def compute_chart(
     ut_hour = hour - timezone_offset
     jd = swe.julday(dob.year, dob.month, dob.day, ut_hour)
 
+    # Set Lahiri ayanamsha (standard for Parashara Vedic astrology)
+    swe.set_sid_mode(swe.SIDM_LAHIRI)
+    ayanamsha = swe.get_ayanamsa(jd)
+
+    flags = swe.FLG_SWIEPH | swe.FLG_SIDEREAL
+
     positions = {}
     for name, planet_id in PLANETS.items():
-        result, _ = swe.calc_ut(jd, planet_id)
-        lon_deg = result[0]
-        sign_idx = int(lon_deg / 30)
-        degree_in_sign = lon_deg % 30
+        result, _ = swe.calc_ut(jd, planet_id, flags)
+        sid_lon = result[0] % 360
+        sign_idx = int(sid_lon / 30)
+        degree_in_sign = sid_lon % 30
         positions[name] = {
-            "longitude": lon_deg,
+            "longitude": sid_lon,
             "sign": SIGNS[sign_idx],
             "degree": round(degree_in_sign, 4),
         }
 
-    # Ketu is always 180° from Rahu
+    # Ketu is always 180° from Rahu (sidereal)
     rahu_lon = positions["Rahu"]["longitude"]
     ketu_lon = (rahu_lon + 180) % 360
     positions["Ketu"] = {
@@ -70,9 +84,9 @@ def compute_chart(
         "degree": round(ketu_lon % 30, 4),
     }
 
-    # Ascendant (Lagna)
+    # Ascendant (Lagna) — tropical from swe.houses, then subtract ayanamsha
     houses, asc_mc = swe.houses(jd, lat, lon, b"P")
-    lagna_lon = asc_mc[0]
+    lagna_lon = _sidereal_lon(asc_mc[0], ayanamsha)
     lagna = SIGNS[int(lagna_lon / 30)]
 
     moon_sign = positions["Moon"]["sign"]
@@ -83,6 +97,7 @@ def compute_chart(
         "moon_sign": moon_sign,
         "positions": positions,
         "tob_unknown": tob_unknown,
+        "ayanamsha": round(ayanamsha, 4),
         "jd": jd,
     }
 
@@ -93,7 +108,6 @@ def compute_vimshottari_dasha(chart: dict, dob: date) -> list[dict]:
 
     # Nakshatra lord determines starting Dasha
     nakshatra_idx = int(moon_lon / (360 / 27))
-    lord_order = [p for p, _ in VIMSHOTTARI_SEQUENCE]
     start_lord_idx = nakshatra_idx % 9
 
     # Fraction of first Dasha remaining at birth
