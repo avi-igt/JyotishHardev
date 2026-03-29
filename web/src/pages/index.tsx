@@ -220,15 +220,21 @@ const HomePage: NextPage = () => {
     }
   };
 
-  // Load Google Places — only after auth check is done (form must be rendered for pobRef to exist)
+  // Attach Google Places autocomplete to the POB input.
+  // Handles both first load (script not yet present) and client-side
+  // navigation back to this page (script already in DOM, API already loaded).
   useEffect(() => {
-    if (authLoading) return;
-    const key = process.env.NEXT_PUBLIC_GOOGLE_PLACES_KEY;
-    if (!key || document.getElementById('gmaps-script')) return;
+    if (authLoading) return; // form not rendered yet
+    if (!pobRef.current) return;
 
-    window.initPlaces = () => {
-      if (!pobRef.current) return;
-      autocompleteRef.current = new window.google.maps.places.Autocomplete(pobRef.current, { types: ['(cities)'] });
+    const key = process.env.NEXT_PUBLIC_GOOGLE_PLACES_KEY;
+    if (!key) return;
+
+    const attachAutocomplete = () => {
+      if (!pobRef.current || autocompleteRef.current) return;
+      autocompleteRef.current = new window.google.maps.places.Autocomplete(
+        pobRef.current, { types: ['(cities)'] }
+      );
       autocompleteRef.current.addListener('place_changed', async () => {
         const place = autocompleteRef.current.getPlace();
         if (!place.geometry) return;
@@ -247,11 +253,20 @@ const HomePage: NextPage = () => {
       });
     };
 
-    const script = document.createElement('script');
-    script.id = 'gmaps-script';
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${key}&libraries=places&callback=initPlaces`;
-    script.async = true;
-    document.head.appendChild(script);
+    if (window.google?.maps?.places) {
+      // API already loaded (e.g. navigated back to this page)
+      attachAutocomplete();
+    } else {
+      // Set callback for when script loads
+      window.initPlaces = attachAutocomplete;
+      if (!document.getElementById('gmaps-script')) {
+        const script = document.createElement('script');
+        script.id = 'gmaps-script';
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${key}&libraries=places&callback=initPlaces`;
+        script.async = true;
+        document.head.appendChild(script);
+      }
+    }
   }, [authLoading]);
 
   const canSubmit = name.trim() && day && month && year && pob && pobLat !== null && pobLon !== null && pobTzOffset !== null && !loading;
