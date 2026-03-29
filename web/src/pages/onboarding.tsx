@@ -820,7 +820,8 @@ const OnboardingPage: NextPage = () => {
         }
 
         .tradition-badge--advanced {
-          background: #6b6b8a;
+          background: #c9a84c;
+          color: #1b1f4a;
         }
 
         .tradition-desc {
