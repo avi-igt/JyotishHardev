@@ -321,7 +321,8 @@ const KundliPage: NextPage = () => {
     }
   };
 
-  const years = Array.from({ length: 2010 - 1930 + 1 }, (_, i) => 2010 - i);
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: currentYear - 1930 + 1 }, (_, i) => currentYear - i);
   const days = Array.from({ length: 31 }, (_, i) => i + 1);
   const hours = Array.from({ length: 12 }, (_, i) => i + 1);
   const minutes = Array.from({ length: 60 }, (_, i) => String(i).padStart(2, '0'));

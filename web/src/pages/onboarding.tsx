@@ -286,7 +286,7 @@ const OnboardingPage: NextPage = () => {
 
   // ── Step renderer ──────────────────────────────────────────────────────────
   const years: number[] = [];
-  for (let y = 2010; y >= 1930; y--) years.push(y);
+  for (let y = new Date().getFullYear(); y >= 1930; y--) years.push(y);
 
   const hours = Array.from({ length: 12 }, (_, i) => String(i + 1));
   const minutes = Array.from({ length: 60 }, (_, i) => String(i).padStart(2, '0'));
