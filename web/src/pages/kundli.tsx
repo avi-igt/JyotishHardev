@@ -25,6 +25,59 @@ interface KundliResult {
   positions: Record<string, PlanetPosition>;
 }
 
+// ─── Static Vedic interpretation tables ─────────────────────────────────────
+
+const LAGNA_DATA: Record<string, {
+  traits: string[];
+  career: string;
+  health: string;
+  finances: string;
+  family: string;
+}> = {
+  Mesha:      { traits: ['Courageous', 'Energetic', 'Pioneering', 'Impulsive'], career: 'Suited for leadership, military, sports, engineering, and surgery. You thrive in roles requiring initiative and quick decisions.', health: 'Prone to headaches, fevers, and inflammation. Guard against accidents and injuries to the head and face.', finances: 'Earn well but spend impulsively. Financial stability comes through discipline. Avoid speculative risks.', family: 'Protective and fiercely loyal. You lead the family but must temper impatience. Spouse brings stability.' },
+  Vrishabha:  { traits: ['Patient', 'Sensual', 'Determined', 'Comfort-loving'], career: 'Drawn to finance, arts, music, hospitality, and beauty industries. You build lasting value patiently.', health: 'Sensitive throat and neck. Watch for thyroid issues, weight gain, and sluggish metabolism.', finances: 'Strong financial instincts. You accumulate wealth steadily but enjoy luxuries. Investments in land and assets favour you.', family: 'Devoted partner and parent. You create a warm, stable home. Can be possessive — trust is important.' },
+  Mithuna:    { traits: ['Intellectual', 'Adaptable', 'Witty', 'Restless'], career: 'Excel in communication, writing, teaching, trading, IT, and media. Your versatility opens many doors.', health: 'Lungs, shoulders, and nervous system need care. Avoid anxiety and over-stimulation.', finances: 'Income from multiple sources. Variable earnings — discipline helps stabilise. Good at financial negotiations.', family: 'Fun and communicative partner. You need mental stimulation in relationships. Two sides to your nature can confuse loved ones.' },
+  Karka:      { traits: ['Intuitive', 'Nurturing', 'Emotional', 'Protective'], career: 'Natural fit for healthcare, hospitality, real estate, psychology, and social work.', health: 'Digestive system and chest are sensitive. Emotional stress manifests physically — manage anxiety.', finances: 'Finances fluctuate like the Moon. Strong savings instinct. Real estate investments are particularly favourable.', family: 'Family is everything to you. Deeply attached to home and mother. Excellent parent — sometimes overprotective.' },
+  Simha:      { traits: ['Confident', 'Generous', 'Dramatic', 'Proud'], career: 'Born for leadership, politics, entertainment, management, and gold or luxury trade.', health: 'Heart and spine need attention. Avoid overexertion. Regular exercise and stress management are essential.', finances: 'Generous spender with a taste for the good life. Wealth comes through status and authority. Avoid ego-driven risks.', family: 'Loyal and loving, you need admiration from family. You are the pillar of the household and take great pride in your children.' },
+  Kanya:      { traits: ['Analytical', 'Practical', 'Perfectionist', 'Service-oriented'], career: 'Thrives in medicine, accounting, writing, analysis, and service professions. Detail is your strength.', health: 'Digestive system and intestines are the weak point. Worry and over-analysis affect gut health.', finances: 'Careful and methodical with money. Excellent at saving. Avoid over-analysis paralysing investment decisions.', family: 'Devoted but critical. You show love through service. Learning to express affection openly strengthens relationships.' },
+  Tula:       { traits: ['Diplomatic', 'Charming', 'Fair-minded', 'Indecisive'], career: 'Law, diplomacy, design, fashion, consultancy, and partnership businesses suit you perfectly.', health: 'Kidneys and lower back need care. Balance work and rest to avoid adrenal fatigue.', finances: 'Good fortune through partnerships. You weigh decisions carefully — avoid prolonged indecision on investments.', family: 'Harmony-seeking partner. You make a gracious host and fair parent. Conflict avoidance can become an issue — speak up.' },
+  Vrishchika: { traits: ['Intense', 'Determined', 'Perceptive', 'Secretive'], career: 'Research, intelligence, medicine, finance, psychology, and transformative work call to you.', health: 'Reproductive organs and elimination system are sensitive. Emotional intensity can create chronic tension.', finances: 'Strong ability to recover from financial setbacks. Gains through inheritance, insurance, or joint resources possible.', family: 'Fiercely loyal but deeply private. You love intensely and expect the same. Transformation defines your family journey.' },
+  Dhanu:      { traits: ['Philosophical', 'Optimistic', 'Adventurous', 'Direct'], career: 'Academia, law, religion, travel, publishing, and higher education are natural domains.', health: 'Hips, thighs, and liver need attention. Guard against excess — food, drink, and overindulgence.', finances: 'Fortune improves after 30. Overseas connections and higher learning bring financial rewards. Generous to a fault.', family: 'Freedom-loving partner who needs space. You are the optimistic, adventurous parent. Relationships flourish with shared ideals.' },
+  Makara:     { traits: ['Ambitious', 'Disciplined', 'Patient', 'Reserved'], career: 'Government, administration, engineering, mining, and long-term institutional careers reward your discipline.', health: 'Bones, joints, and knees are vulnerable. Skin conditions possible. Adequate rest prevents burnout.', finances: 'Slow and steady accumulation. Strong financial discipline brings lasting wealth after middle age. Land and property favour you.', family: 'Responsible and dutiful. Career demands can create distance — consciously invest time in family. Loyal long-term partner.' },
+  Kumbha:     { traits: ['Humanitarian', 'Independent', 'Unconventional', 'Visionary'], career: 'Technology, social reform, astrology, science, and unconventional careers suit your forward-thinking nature.', health: 'Circulation, ankles, and calves need care. Avoid sedentary habits and isolation.', finances: 'Irregular income in youth, stability later. Gains from groups, networks, and innovative ventures.', family: 'Committed but need independence. You are the free-thinking, modern parent. Friends and family blend naturally in your world.' },
+  Meena:      { traits: ['Compassionate', 'Intuitive', 'Spiritual', 'Dreamy'], career: 'Medicine, arts, spirituality, charity, filmmaking, and healing professions align with your empathetic nature.', health: 'Feet and lymphatic system need care. Susceptible to infections and psychosomatic ailments. Sleep is healing.', finances: 'Variable finances — spiritual detachment to money can be a double-edged sword. Charitable giving is natural and brings blessings.', family: 'Selfless and giving partner and parent. Boundaries are important — you absorb family stress deeply. Choose partner with practical strengths.' },
+};
+
+const NAKSHATRA_LUCKY: Record<string, { numbers: number[]; colour: string; day: string }> = {
+  Ashwini:          { numbers: [1, 7], colour: 'Red',          day: 'Tuesday' },
+  Bharani:          { numbers: [6, 9], colour: 'White',        day: 'Friday' },
+  Krittika:         { numbers: [1, 3], colour: 'Golden',       day: 'Sunday' },
+  Rohini:           { numbers: [2, 6], colour: 'White',        day: 'Monday' },
+  Mrigashira:       { numbers: [9, 5], colour: 'Silver',       day: 'Tuesday' },
+  Ardra:            { numbers: [4, 7], colour: 'Blue',         day: 'Wednesday' },
+  Punarvasu:        { numbers: [3, 5], colour: 'Yellow',       day: 'Thursday' },
+  Pushya:           { numbers: [8, 3], colour: 'Dark Blue',    day: 'Saturday' },
+  Ashlesha:         { numbers: [5, 7], colour: 'Grey',         day: 'Wednesday' },
+  Magha:            { numbers: [7, 1], colour: 'Cream',        day: 'Sunday' },
+  'Purva Phalguni': { numbers: [6, 8], colour: 'Pink',         day: 'Friday' },
+  'Uttara Phalguni':{ numbers: [1, 2], colour: 'Golden',       day: 'Sunday' },
+  Hasta:            { numbers: [2, 5], colour: 'Green',        day: 'Monday' },
+  Chitra:           { numbers: [9, 4], colour: 'Red',          day: 'Tuesday' },
+  Swati:            { numbers: [4, 6], colour: 'Black',        day: 'Saturday' },
+  Vishakha:         { numbers: [3, 9], colour: 'Yellow',       day: 'Thursday' },
+  Anuradha:         { numbers: [8, 2], colour: 'Dark Blue',    day: 'Saturday' },
+  Jyeshtha:         { numbers: [5, 3], colour: 'Cream',        day: 'Wednesday' },
+  Mula:             { numbers: [7, 8], colour: 'Brown',        day: 'Saturday' },
+  'Purva Ashadha':  { numbers: [6, 3], colour: 'White',        day: 'Friday' },
+  'Uttara Ashadha': { numbers: [1, 8], colour: 'Golden',       day: 'Sunday' },
+  Shravana:         { numbers: [2, 4], colour: 'Light Blue',   day: 'Monday' },
+  Dhanishtha:       { numbers: [9, 7], colour: 'Silver',       day: 'Tuesday' },
+  Shatabhisha:      { numbers: [4, 1], colour: 'Blue',         day: 'Saturday' },
+  'Purva Bhadrapada':{ numbers: [3, 6], colour: 'Yellow',      day: 'Thursday' },
+  'Uttara Bhadrapada':{ numbers: [8, 9], colour: 'Dark Blue',  day: 'Saturday' },
+  Revati:           { numbers: [5, 2], colour: 'Yellow',       day: 'Wednesday' },
+};
+
 // ─── South Indian chart layout ───────────────────────────────────────────────
 
 const SIGN_GRID: Array<{ sign: string; row: number; col: number }> = [
@@ -409,6 +462,59 @@ const KundliPage: NextPage = () => {
                   ))}
                 </div>
               </div>
+
+              {/* Interpretations */}
+              {(() => {
+                const interp = LAGNA_DATA[result.lagna];
+                const lucky = NAKSHATRA_LUCKY[result.nakshatra];
+                if (!interp) return null;
+                return (
+                  <div className="interp-section">
+                    <h3 className="section-title">Your Vedic Profile</h3>
+
+                    {/* Traits */}
+                    <div className="interp-block">
+                      <div className="interp-label">Personality Traits</div>
+                      <div className="traits-row">
+                        {interp.traits.map(t => (
+                          <span key={t} className="trait-chip">{t}</span>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Lucky */}
+                    {lucky && (
+                      <div className="interp-block lucky-row">
+                        <div className="lucky-item">
+                          <div className="lucky-label">Lucky Numbers</div>
+                          <div className="lucky-value">{lucky.numbers.join(' · ')}</div>
+                        </div>
+                        <div className="lucky-item">
+                          <div className="lucky-label">Lucky Colour</div>
+                          <div className="lucky-value">{lucky.colour}</div>
+                        </div>
+                        <div className="lucky-item">
+                          <div className="lucky-label">Lucky Day</div>
+                          <div className="lucky-value">{lucky.day}</div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Life areas */}
+                    {[
+                      { icon: '💼', label: 'Career', text: interp.career },
+                      { icon: '💰', label: 'Finances', text: interp.finances },
+                      { icon: '🏠', label: 'Family Life', text: interp.family },
+                      { icon: '🌿', label: 'Health', text: interp.health },
+                    ].map(({ icon, label, text }) => (
+                      <div key={label} className="interp-block">
+                        <div className="interp-label">{icon} {label}</div>
+                        <p className="interp-text">{text}</p>
+                      </div>
+                    ))}
+                  </div>
+                );
+              })()}
 
               {/* CTA */}
               <div className="cta-section">
@@ -807,6 +913,82 @@ const KundliPage: NextPage = () => {
           font-size: 13px;
           color: #6b6b8a;
           font-family: monospace;
+        }
+
+        /* Interpretations */
+        .interp-section {
+          background: #ffffff;
+          border-radius: 12px;
+          padding: 20px;
+          margin-bottom: 24px;
+          box-shadow: 0 2px 8px rgba(27,31,74,0.07);
+        }
+
+        .interp-block {
+          padding: 14px 0;
+          border-bottom: 1px solid #f0ece4;
+        }
+
+        .interp-block:last-child { border-bottom: none; }
+
+        .interp-label {
+          font-size: 11px;
+          font-weight: 700;
+          color: #6b6b8a;
+          letter-spacing: 0.7px;
+          text-transform: uppercase;
+          margin-bottom: 8px;
+        }
+
+        .interp-text {
+          font-size: 14px;
+          color: #1a1a2e;
+          line-height: 1.7;
+          margin: 0;
+        }
+
+        .traits-row {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+        }
+
+        .trait-chip {
+          background: #f0ecff;
+          color: #1b1f4a;
+          border-radius: 20px;
+          padding: 5px 14px;
+          font-size: 13px;
+          font-weight: 500;
+        }
+
+        .lucky-row {
+          display: flex;
+          gap: 0;
+        }
+
+        .lucky-item {
+          flex: 1;
+          text-align: center;
+          padding: 4px 8px;
+          border-right: 1px solid #f0ece4;
+        }
+
+        .lucky-item:last-child { border-right: none; }
+
+        .lucky-label {
+          font-size: 10px;
+          font-weight: 600;
+          color: #6b6b8a;
+          letter-spacing: 0.5px;
+          text-transform: uppercase;
+          margin-bottom: 4px;
+        }
+
+        .lucky-value {
+          font-size: 16px;
+          font-weight: 700;
+          color: #1b1f4a;
         }
 
         /* CTA */
