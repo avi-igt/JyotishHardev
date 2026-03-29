@@ -152,9 +152,11 @@ const KundliPage: NextPage = () => {
           const tz = await res.json();
           if (tz.status === 'OK') {
             setPobTzOffset((tz.rawOffset + tz.dstOffset) / 3600);
+          } else {
+            // Timezone API not enabled or quota exceeded — fall back to UTC
+            setPobTzOffset(0);
           }
         } catch {
-          // fallback to UTC
           setPobTzOffset(0);
         }
       });
