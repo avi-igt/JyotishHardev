@@ -1138,12 +1138,12 @@ const KundliPage: NextPage = () => {
 
         .ai-banner-btn {
           flex-shrink: 0;
-          background: #c9a84c;
-          color: #1b1f4a !important;
-          border: none;
+          background: transparent;
+          color: #c9a84c !important;
+          border: 2px solid #c9a84c;
           border-radius: 20px;
           padding: 10px 20px;
-          font-size: 14px;
+          font-size: 16px;
           font-weight: 800;
           cursor: pointer;
           text-decoration: none !important;
@@ -1151,11 +1151,14 @@ const KundliPage: NextPage = () => {
           min-height: 44px;
           display: flex;
           align-items: center;
-          transition: opacity 150ms;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+          transition: background 150ms, color 150ms;
         }
 
-        .ai-banner-btn:hover:not(:disabled) { opacity: 0.88; }
+        .ai-banner-btn:hover:not(:disabled) {
+          background: #c9a84c;
+          color: #1b1f4a !important;
+        }
+
         .ai-banner-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
         /* CTA */
