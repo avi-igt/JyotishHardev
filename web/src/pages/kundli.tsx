@@ -7,6 +7,8 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
+import { supabase } from '@/lib/supabase';
+import { api } from '@/lib/api';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -175,8 +177,51 @@ const KundliPage: NextPage = () => {
   const [result, setResult] = useState<KundliResult | null>(null);
   const [error, setError] = useState('');
 
+  // AI interpretation state
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiResult, setAiResult] = useState<{ personality: string; career: string; finances: string; family: string; health: string } | null>(null);
+  const [aiError, setAiError] = useState('');
+  const [userStatus, setUserStatus] = useState<'guest' | 'active' | 'expired'>('guest');
+
   const pobRef = useRef<HTMLInputElement>(null);
   const autocompleteRef = useRef<any>(null);
+
+  // Check auth + subscription status
+  useEffect(() => {
+    supabase.auth.getSession().then(async ({ data }) => {
+      if (!data.session) { setUserStatus('guest'); return; }
+      try {
+        const me = await api.getMe();
+        const now = new Date();
+        const trialActive = new Date(me.profile.trial_expires_at) > now;
+        if (me.profile.subscription_active || trialActive) {
+          setUserStatus('active');
+        } else {
+          setUserStatus('expired');
+        }
+      } catch {
+        setUserStatus('guest');
+      }
+    });
+  }, []);
+
+  const handleAiInterpret = async () => {
+    if (!result) return;
+    setAiLoading(true);
+    setAiError('');
+    try {
+      const data = await api.interpretKundli(result);
+      setAiResult(data);
+    } catch (err: any) {
+      if (err.status === 402) {
+        setAiError('upgrade');
+      } else {
+        setAiError(err.detail ?? 'Could not generate reading. Please try again.');
+      }
+    } finally {
+      setAiLoading(false);
+    }
+  };
 
   // Load Google Places
   useEffect(() => {
@@ -467,52 +512,110 @@ const KundliPage: NextPage = () => {
               {(() => {
                 const interp = LAGNA_DATA[result.lagna];
                 const lucky = NAKSHATRA_LUCKY[result.nakshatra];
-                if (!interp) return null;
-                return (
-                  <div className="interp-section">
-                    <h3 className="section-title">Your Vedic Profile</h3>
 
-                    {/* Traits */}
-                    <div className="interp-block">
-                      <div className="interp-label">Personality Traits</div>
-                      <div className="traits-row">
-                        {interp.traits.map(t => (
-                          <span key={t} className="trait-chip">{t}</span>
-                        ))}
-                      </div>
+                // Lucky numbers — always shown (static)
+                const luckyBlock = lucky && (
+                  <div className="interp-block lucky-row">
+                    <div className="lucky-item">
+                      <div className="lucky-label">Lucky Numbers</div>
+                      <div className="lucky-value">{lucky.numbers.join(' · ')}</div>
                     </div>
+                    <div className="lucky-item">
+                      <div className="lucky-label">Lucky Colour</div>
+                      <div className="lucky-value">{lucky.colour}</div>
+                    </div>
+                    <div className="lucky-item">
+                      <div className="lucky-label">Lucky Day</div>
+                      <div className="lucky-value">{lucky.day}</div>
+                    </div>
+                  </div>
+                );
 
-                    {/* Lucky */}
-                    {lucky && (
-                      <div className="interp-block lucky-row">
-                        <div className="lucky-item">
-                          <div className="lucky-label">Lucky Numbers</div>
-                          <div className="lucky-value">{lucky.numbers.join(' · ')}</div>
+                // AI reading shown if loaded
+                if (aiResult) {
+                  return (
+                    <div className="interp-section">
+                      <div className="ai-badge">✦ AI Reading by Hardev</div>
+                      <h3 className="section-title">Your Personalised Reading</h3>
+                      {luckyBlock}
+                      {[
+                        { icon: '🪐', label: 'Personality', text: aiResult.personality },
+                        { icon: '💼', label: 'Career', text: aiResult.career },
+                        { icon: '💰', label: 'Finances', text: aiResult.finances },
+                        { icon: '🏠', label: 'Family Life', text: aiResult.family },
+                        { icon: '🌿', label: 'Health', text: aiResult.health },
+                      ].map(({ icon, label, text }) => text ? (
+                        <div key={label} className="interp-block">
+                          <div className="interp-label">{icon} {label}</div>
+                          <p className="interp-text">{text}</p>
                         </div>
-                        <div className="lucky-item">
-                          <div className="lucky-label">Lucky Colour</div>
-                          <div className="lucky-value">{lucky.colour}</div>
+                      ) : null)}
+                    </div>
+                  );
+                }
+
+                // Static reading — always shown while AI not loaded
+                return (
+                  <>
+                    {interp && (
+                      <div className="interp-section">
+                        <h3 className="section-title">Your Vedic Profile</h3>
+                        <div className="interp-block">
+                          <div className="interp-label">Personality Traits</div>
+                          <div className="traits-row">
+                            {interp.traits.map(t => (
+                              <span key={t} className="trait-chip">{t}</span>
+                            ))}
+                          </div>
                         </div>
-                        <div className="lucky-item">
-                          <div className="lucky-label">Lucky Day</div>
-                          <div className="lucky-value">{lucky.day}</div>
-                        </div>
+                        {luckyBlock}
+                        {[
+                          { icon: '💼', label: 'Career', text: interp.career },
+                          { icon: '💰', label: 'Finances', text: interp.finances },
+                          { icon: '🏠', label: 'Family Life', text: interp.family },
+                          { icon: '🌿', label: 'Health', text: interp.health },
+                        ].map(({ icon, label, text }) => (
+                          <div key={label} className="interp-block">
+                            <div className="interp-label">{icon} {label}</div>
+                            <p className="interp-text">{text}</p>
+                          </div>
+                        ))}
                       </div>
                     )}
 
-                    {/* Life areas */}
-                    {[
-                      { icon: '💼', label: 'Career', text: interp.career },
-                      { icon: '💰', label: 'Finances', text: interp.finances },
-                      { icon: '🏠', label: 'Family Life', text: interp.family },
-                      { icon: '🌿', label: 'Health', text: interp.health },
-                    ].map(({ icon, label, text }) => (
-                      <div key={label} className="interp-block">
-                        <div className="interp-label">{icon} {label}</div>
-                        <p className="interp-text">{text}</p>
+                    {/* AI upgrade banner */}
+                    <div className="ai-banner">
+                      <div className="ai-banner-left">
+                        <div className="ai-banner-title">✦ Get your personalised AI reading</div>
+                        <div className="ai-banner-sub">
+                          Hardev analyses your exact planetary positions and speaks directly to your chart.
+                        </div>
                       </div>
-                    ))}
-                  </div>
+                      {userStatus === 'guest' && (
+                        <Link href="/signup" className="ai-banner-btn">Sign up free →</Link>
+                      )}
+                      {userStatus === 'active' && (
+                        <button
+                          className="ai-banner-btn"
+                          onClick={handleAiInterpret}
+                          disabled={aiLoading}
+                        >
+                          {aiLoading ? 'Reading…' : 'Get reading →'}
+                        </button>
+                      )}
+                      {userStatus === 'expired' && (
+                        <Link href="/account" className="ai-banner-btn">Upgrade →</Link>
+                      )}
+                    </div>
+                    {aiError && aiError !== 'upgrade' && (
+                      <div className="error-box" style={{ marginBottom: 16 }}>{aiError}</div>
+                    )}
+                    {aiError === 'upgrade' && (
+                      <div className="error-box" style={{ marginBottom: 16 }}>
+                        Your trial has ended. <Link href="/account" style={{ color: '#1b1f4a', fontWeight: 600 }}>Upgrade to continue →</Link>
+                      </div>
+                    )}
+                  </>
                 );
               })()}
 
@@ -990,6 +1093,68 @@ const KundliPage: NextPage = () => {
           font-weight: 700;
           color: #1b1f4a;
         }
+
+        .ai-badge {
+          display: inline-block;
+          background: linear-gradient(135deg, #1b1f4a, #3a3f8a);
+          color: #c9a84c;
+          font-size: 11px;
+          font-weight: 700;
+          letter-spacing: 0.8px;
+          text-transform: uppercase;
+          border-radius: 20px;
+          padding: 4px 12px;
+          margin-bottom: 12px;
+        }
+
+        .ai-banner {
+          background: linear-gradient(135deg, #1b1f4a 0%, #2d3270 100%);
+          border-radius: 12px;
+          padding: 20px;
+          margin-bottom: 24px;
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          box-shadow: 0 4px 16px rgba(27,31,74,0.2);
+        }
+
+        .ai-banner-left {
+          flex: 1;
+        }
+
+        .ai-banner-title {
+          font-size: 15px;
+          font-weight: 700;
+          color: #c9a84c;
+          margin-bottom: 4px;
+        }
+
+        .ai-banner-sub {
+          font-size: 12px;
+          color: #9099cc;
+          line-height: 1.5;
+        }
+
+        .ai-banner-btn {
+          flex-shrink: 0;
+          background: #c9a84c;
+          color: #1b1f4a;
+          border: none;
+          border-radius: 20px;
+          padding: 10px 18px;
+          font-size: 13px;
+          font-weight: 700;
+          cursor: pointer;
+          text-decoration: none;
+          white-space: nowrap;
+          min-height: 44px;
+          display: flex;
+          align-items: center;
+          transition: opacity 150ms;
+        }
+
+        .ai-banner-btn:hover:not(:disabled) { opacity: 0.88; }
+        .ai-banner-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
         /* CTA */
         .cta-section {

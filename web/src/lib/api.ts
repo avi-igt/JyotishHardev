@@ -36,4 +36,6 @@ export const api = {
   logEvent: (body: any) =>
     apiFetch('/api/v1/events', { method: 'POST', body: JSON.stringify(body) }),
   getEvents: () => apiFetch('/api/v1/events'),
+  interpretKundli: (body: any) =>
+    apiFetch('/api/v1/kundli/interpret', { method: 'POST', body: JSON.stringify(body) }),
 };
