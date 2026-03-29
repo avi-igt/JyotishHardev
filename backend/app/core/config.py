@@ -17,6 +17,7 @@ class Settings(BaseSettings):
     session_memory_max: int = 20
     session_memory_cold_start: int = 3  # inject all sessions below this threshold
     allowed_origins: str = "http://localhost:3000"  # comma-separated list
+    admin_email: str = ""
 
     class Config:
         env_file = ".env"

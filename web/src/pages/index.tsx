@@ -12,6 +12,7 @@ import { useRouter } from 'next/router';
 import { supabase } from '@/lib/supabase';
 import { api } from '@/lib/api';
 import { useAuth } from './_app';
+import PublicNav from '@/components/PublicNav';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -363,17 +364,7 @@ const HomePage: NextPage = () => {
       </Head>
 
       <main className="page">
-        {/* Nav */}
-        <header className="nav">
-          <div className="brand">
-            <span className="brand-icon">⊕</span>
-            <span className="brand-name">JyotishHardev</span>
-          </div>
-          <div className="nav-links">
-            <Link href="/login" className="nav-link">Sign in</Link>
-            <Link href="/signup" className="nav-cta">Get started free</Link>
-          </div>
-        </header>
+        <PublicNav />
 
         <div className="container">
           {/* Hero */}
@@ -659,47 +650,7 @@ const HomePage: NextPage = () => {
           color: #1a1a2e;
         }
 
-        .nav {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 14px 24px;
-          background: #1b1f4a;
-        }
-
-        .brand {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-        }
-
-        .brand-icon { font-size: 22px; color: #c9a84c; }
-
-        .brand-name {
-          font-size: 16px;
-          font-weight: 600;
-          color: #ffffff;
-          font-family: 'Tiro Devanagari Hindi', Georgia, serif;
-        }
-
-        .nav-links { display: flex; align-items: center; gap: 16px; }
-
-        .nav-link { font-size: 14px; color: #c9a84c; text-decoration: none; font-weight: 500; }
-        .nav-link:hover { text-decoration: underline; }
-
-        .nav-cta {
-          font-size: 13px;
-          font-weight: 600;
-          color: #1b1f4a;
-          background: #c9a84c;
-          padding: 7px 16px;
-          border-radius: 20px;
-          text-decoration: none;
-          transition: opacity 150ms;
-        }
-        .nav-cta:hover { opacity: 0.88; }
-
-        .container {
+.container {
           max-width: 640px;
           margin: 0 auto;
           padding: 32px 16px 64px;
