@@ -1139,19 +1139,20 @@ const KundliPage: NextPage = () => {
         .ai-banner-btn {
           flex-shrink: 0;
           background: #c9a84c;
-          color: #1b1f4a;
+          color: #1b1f4a !important;
           border: none;
           border-radius: 20px;
-          padding: 10px 18px;
-          font-size: 13px;
-          font-weight: 700;
+          padding: 10px 20px;
+          font-size: 14px;
+          font-weight: 800;
           cursor: pointer;
-          text-decoration: none;
+          text-decoration: none !important;
           white-space: nowrap;
           min-height: 44px;
           display: flex;
           align-items: center;
           transition: opacity 150ms;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.25);
         }
 
         .ai-banner-btn:hover:not(:disabled) { opacity: 0.88; }
