@@ -12,7 +12,7 @@ interface AuthContext {
 const AuthCtx = createContext<AuthContext>({ session: null, loading: true });
 export const useAuth = () => useContext(AuthCtx);
 
-const PUBLIC_ROUTES = ['/', '/login', '/signup', '/share'];
+const PUBLIC_ROUTES = ['/', '/login', '/signup', '/share', '/daily', '/transits', '/library', '/predictions', '/nakshatras', '/rashis', '/kundli'];
 
 export default function App({ Component, pageProps }: AppProps) {
   const [session, setSession] = useState<Session | null>(null);
@@ -33,7 +33,7 @@ export default function App({ Component, pageProps }: AppProps) {
   useEffect(() => {
     if (loading) return;
     const isPublic = PUBLIC_ROUTES.some(
-      (r) => router.pathname === r || router.pathname.startsWith('/share')
+      (r) => router.pathname === r || router.pathname.startsWith(r + '/')
     );
     if (!session && !isPublic) router.push('/login');
   }, [session, loading, router.pathname]);
