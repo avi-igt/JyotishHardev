@@ -119,29 +119,63 @@ function KundaliChart({ lagna, positions }: { lagna: string; positions: Record<s
     signPlanets[pos.sign].push(PLANET_ABBREV[planet] ?? planet.slice(0, 2));
   });
 
+  const gridStyle: React.CSSProperties = {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(4, 1fr)',
+    gridTemplateRows: 'repeat(4, 1fr)',
+    gap: 2,
+    background: '#1b1f4a',
+    border: '2px solid #1b1f4a',
+    borderRadius: 4,
+    aspectRatio: '1',
+    maxWidth: 320,
+    margin: '0 auto',
+  };
+
+  const cellBase: React.CSSProperties = {
+    background: '#faf8f4',
+    padding: 4,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    minHeight: 60,
+    position: 'relative',
+  };
+
   return (
-    <div className="chart-grid" role="img" aria-label="South Indian Kundali chart">
+    <div style={gridStyle} role="img" aria-label="South Indian Kundali chart">
       {SIGN_GRID.map(({ sign, row, col }) => {
         const isLagna = sign === lagna;
         const planets = signPlanets[sign] ?? [];
         return (
           <div
             key={sign}
-            className={`chart-cell ${isLagna ? 'lagna-cell' : ''}`}
-            style={{ gridRow: row + 1, gridColumn: col + 1 }}
+            style={{
+              ...cellBase,
+              gridRow: row + 1,
+              gridColumn: col + 1,
+              background: isLagna ? '#fff8e7' : '#faf8f4',
+              border: isLagna ? '1px solid #c9a84c' : undefined,
+            }}
             title={sign}
           >
-            {isLagna && <span className="lagna-marker">Lag</span>}
-            <span className="cell-sign">{SIGN_ABBREV[sign]}</span>
+            {isLagna && (
+              <span style={{ fontSize: 9, fontWeight: 700, color: '#c9a84c', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                Lag
+              </span>
+            )}
+            <span style={{ fontSize: 10, color: '#6b6b8a', fontWeight: 500 }}>{SIGN_ABBREV[sign]}</span>
             {planets.length > 0 && (
-              <span className="cell-planets">{planets.join(' ')}</span>
+              <span style={{ fontSize: 10, fontWeight: 600, color: '#1b1f4a', lineHeight: 1.4, marginTop: 2 }}>
+                {planets.join(' ')}
+              </span>
             )}
           </div>
         );
       })}
       {[[1,1],[1,2],[2,1],[2,2]].map(([r,c]) => (
-        <div key={`c${r}${c}`} className="chart-cell center-cell"
-          style={{ gridRow: r + 1, gridColumn: c + 1 }} />
+        <div key={`c${r}${c}`} style={{ ...cellBase, gridRow: r + 1, gridColumn: c + 1, background: '#f0ebe0' }} />
       ))}
     </div>
   );
