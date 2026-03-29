@@ -63,14 +63,20 @@ function loadGoogleMaps(apiKey: string): Promise<void> {
   });
 }
 
-async function resolveTimezone(lat: number, lng: number, apiKey: string) {
-  const ts = Math.floor(Date.now() / 1000);
-  const url = `https://maps.googleapis.com/maps/api/timezone/json?location=${lat},${lng}&timestamp=${ts}&key=${apiKey}`;
-  const res = await fetch(url);
-  const data = await res.json();
-  if (data.status !== 'OK') return { timeZoneId: 'UTC', offsetHours: 0 };
-  const offsetHours = (data.rawOffset + data.dstOffset) / 3600;
-  return { timeZoneId: data.timeZoneId as string, offsetHours };
+async function resolveTimezone(lat: number, lng: number, _apiKey: string) {
+  try {
+    const res = await fetch(
+      `https://timeapi.io/api/TimeZone/coordinate?latitude=${lat}&longitude=${lng}`
+    );
+    const data = await res.json();
+    if (data.currentUtcOffset?.seconds !== undefined) {
+      const offsetHours = data.currentUtcOffset.seconds / 3600;
+      return { timeZoneId: data.timeZone as string, offsetHours };
+    }
+  } catch {
+    // fall through to UTC
+  }
+  return { timeZoneId: 'UTC', offsetHours: 0 };
 }
 
 // ─── Page ─────────────────────────────────────────────────────────────────────

@@ -143,17 +143,15 @@ const KundliPage: NextPage = () => {
         setPob(place.formatted_address ?? place.name ?? '');
         setPobLat(lat);
         setPobLon(lng);
-        // Resolve timezone
-        const ts = Math.floor(Date.now() / 1000);
+        // Resolve timezone via timeapi.io (free, no key required)
         try {
           const res = await fetch(
-            `https://maps.googleapis.com/maps/api/timezone/json?location=${lat},${lng}&timestamp=${ts}&key=${key}`
+            `https://timeapi.io/api/TimeZone/coordinate?latitude=${lat}&longitude=${lng}`
           );
           const tz = await res.json();
-          if (tz.status === 'OK') {
-            setPobTzOffset((tz.rawOffset + tz.dstOffset) / 3600);
+          if (tz.currentUtcOffset?.seconds !== undefined) {
+            setPobTzOffset(tz.currentUtcOffset.seconds / 3600);
           } else {
-            // Timezone API not enabled or quota exceeded — fall back to UTC
             setPobTzOffset(0);
           }
         } catch {
