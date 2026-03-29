@@ -175,6 +175,12 @@ const HomePage: NextPage = () => {
   const [result, setResult] = useState<KundliResult | null>(null);
   const [error, setError] = useState('');
 
+  // Daily Panchang snapshot
+  const [panchang, setPanchang] = useState<{
+    tithi: string; nakshatra: string; yoga: string;
+    moon_sign: string; date_ist: string; energy_summary: string;
+  } | null>(null);
+
   const [aiLoading, setAiLoading] = useState(false);
   const [aiResult, setAiResult] = useState<{ personality: string; career: string; finances: string; family: string; health: string } | null>(null);
   const [aiError, setAiError] = useState('');
@@ -189,6 +195,33 @@ const HomePage: NextPage = () => {
       router.push('/dashboard');
     }
   }, [session, authLoading, router]);
+
+  // Fetch daily Panchang — auto-refreshes at midnight IST
+  useEffect(() => {
+    const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+    const fetchPanchang = () =>
+      fetch(`${apiBase}/api/v1/public/panchang/today`)
+        .then(r => r.ok ? r.json() : null)
+        .then(data => { if (data) setPanchang(data); })
+        .catch(() => {});
+
+    fetchPanchang();
+
+    // Schedule refresh at next midnight IST
+    const scheduleRefresh = () => {
+      const now = new Date();
+      const istOffset = 5.5 * 60 * 60 * 1000;
+      const nowIST = new Date(now.getTime() + istOffset);
+      const nextMidnightIST = new Date(nowIST);
+      nextMidnightIST.setUTCHours(18, 30, 0, 0); // midnight IST = 18:30 UTC
+      if (nextMidnightIST <= nowIST) nextMidnightIST.setUTCDate(nextMidnightIST.getUTCDate() + 1);
+      const msUntilMidnight = nextMidnightIST.getTime() - now.getTime();
+      return setTimeout(() => { fetchPanchang(); scheduleRefresh(); }, msUntilMidnight);
+    };
+
+    const timer = scheduleRefresh();
+    return () => clearTimeout(timer);
+  }, []);
 
   // Check auth + subscription status for AI feature
   useEffect(() => {
@@ -351,6 +384,42 @@ const HomePage: NextPage = () => {
               No account needed.
             </p>
           </div>
+
+          {/* Daily Cosmic Snapshot */}
+          {panchang && (
+            <div className="snapshot-card">
+              <div className="snapshot-header">
+                <span className="snapshot-icon">☽</span>
+                <div>
+                  <div className="snapshot-title">Today&apos;s Cosmic Snapshot</div>
+                  <div className="snapshot-date">{panchang.date_ist}</div>
+                </div>
+              </div>
+              <div className="snapshot-grid">
+                <div className="snapshot-item">
+                  <div className="snapshot-label">Tithi</div>
+                  <div className="snapshot-value">{panchang.tithi}</div>
+                </div>
+                <div className="snapshot-item">
+                  <div className="snapshot-label">Nakshatra</div>
+                  <div className="snapshot-value">{panchang.nakshatra}</div>
+                </div>
+                <div className="snapshot-item">
+                  <div className="snapshot-label">Yoga</div>
+                  <div className="snapshot-value">{panchang.yoga}</div>
+                </div>
+                <div className="snapshot-item">
+                  <div className="snapshot-label">Moon in</div>
+                  <div className="snapshot-value">{panchang.moon_sign}</div>
+                </div>
+              </div>
+              <p className="snapshot-energy">{panchang.energy_summary}</p>
+              <div className="snapshot-cta">
+                <span className="snapshot-cta-text">What does this mean for your chart?</span>
+                <Link href="/signup" className="snapshot-cta-link">Sign in to find out →</Link>
+              </div>
+            </div>
+          )}
 
           {!result ? (
             <form className="form-card" onSubmit={handleSubmit} noValidate>
@@ -656,6 +725,100 @@ const HomePage: NextPage = () => {
           max-width: 480px;
           margin: 0 auto;
         }
+
+        /* ── Cosmic snapshot ── */
+        .snapshot-card {
+          background: linear-gradient(135deg, #1b1f4a 0%, #2d3270 100%);
+          border-radius: 16px;
+          padding: 20px;
+          margin-bottom: 24px;
+          box-shadow: 0 4px 16px rgba(27,31,74,0.15);
+        }
+
+        .snapshot-header {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          margin-bottom: 16px;
+        }
+
+        .snapshot-icon {
+          font-size: 28px;
+          color: #c9a84c;
+          line-height: 1;
+        }
+
+        .snapshot-title {
+          font-size: 14px;
+          font-weight: 700;
+          color: #ffffff;
+          letter-spacing: 0.02em;
+        }
+
+        .snapshot-date {
+          font-size: 12px;
+          color: #8891c8;
+          margin-top: 2px;
+        }
+
+        .snapshot-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 10px;
+          margin-bottom: 16px;
+        }
+
+        .snapshot-item {
+          background: rgba(255,255,255,0.07);
+          border-radius: 8px;
+          padding: 10px 12px;
+        }
+
+        .snapshot-label {
+          font-size: 10px;
+          color: #8891c8;
+          text-transform: uppercase;
+          letter-spacing: 0.06em;
+          margin-bottom: 3px;
+        }
+
+        .snapshot-value {
+          font-size: 14px;
+          font-weight: 700;
+          color: #c9a84c;
+        }
+
+        .snapshot-energy {
+          font-size: 13px;
+          color: #c8cce8;
+          line-height: 1.65;
+          margin: 0 0 16px;
+          font-style: italic;
+        }
+
+        .snapshot-cta {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+          padding-top: 14px;
+          border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .snapshot-cta-text {
+          font-size: 13px;
+          color: #a0a4c8;
+        }
+
+        .snapshot-cta-link {
+          font-size: 13px;
+          font-weight: 700;
+          color: #c9a84c;
+          text-decoration: none;
+          white-space: nowrap;
+        }
+
+        .snapshot-cta-link:hover { text-decoration: underline; }
 
         /* ── Form ── */
         .form-card {

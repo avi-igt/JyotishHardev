@@ -3,9 +3,10 @@
 Used by the /kundli free chart generator page.
 The /kundli/interpret endpoint requires auth (trial or paid users only).
 """
-from datetime import date, time as dt_time, datetime
+from datetime import date, time as dt_time, datetime, timezone, timedelta
 from typing import Optional
 
+import swisseph as swe
 import anthropic
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel
@@ -29,7 +30,113 @@ NAKSHATRAS = [
 ]
 
 
+# ─── Panchang data ────────────────────────────────────────────────────────────
+
+TITHIS = [
+    "Pratipada", "Dwitiya", "Tritiya", "Chaturthi", "Panchami",
+    "Shashthi", "Saptami", "Ashtami", "Navami", "Dashami",
+    "Ekadashi", "Dwadashi", "Trayodashi", "Chaturdashi", "Purnima/Amavasya",
+]
+
+YOGAS = [
+    "Vishkumbha", "Preeti", "Ayushman", "Saubhagya", "Shobhana",
+    "Atiganda", "Sukarma", "Dhriti", "Shula", "Ganda",
+    "Vriddhi", "Dhruva", "Vyaghata", "Harshana", "Vajra",
+    "Siddhi", "Vyatipata", "Variyana", "Parigha", "Shiva",
+    "Siddha", "Sadhya", "Shubha", "Shukla", "Brahma",
+    "Indra", "Vaidhriti",
+]
+
+# In-memory daily cache keyed by IST date string "YYYY-MM-DD"
+_panchang_cache: dict = {}
+
+
+def _get_ist_date() -> str:
+    """Return today's date in IST (UTC+5:30) as YYYY-MM-DD string."""
+    ist = timezone(timedelta(hours=5, minutes=30))
+    return datetime.now(ist).strftime("%Y-%m-%d")
+
+
+def _compute_panchang() -> dict:
+    """Compute today's Panchang values using pyswisseph (sidereal, Lahiri)."""
+    IST = timezone(timedelta(hours=5, minutes=30))
+    now_ist = datetime.now(IST)
+    # Use midnight IST (start of day) for the computation
+    dt_utc = now_ist.replace(hour=0, minute=0, second=0, microsecond=0).astimezone(timezone.utc)
+    jd = swe.julday(dt_utc.year, dt_utc.month, dt_utc.day, dt_utc.hour + dt_utc.minute / 60.0)
+
+    swe.set_sid_mode(swe.SIDM_LAHIRI)
+    ayanamsha = swe.get_ayanamsa(jd)
+    flags = swe.FLG_SWIEPH | swe.FLG_SIDEREAL
+
+    sun_lon_raw, _ = swe.calc_ut(jd, swe.SUN, flags)
+    moon_lon_raw, _ = swe.calc_ut(jd, swe.MOON, flags)
+    sun_lon = sun_lon_raw[0]
+    moon_lon = moon_lon_raw[0]
+
+    # Tithi: each tithi is 12° of Moon-Sun separation (1-30)
+    diff = (moon_lon - sun_lon) % 360
+    tithi_idx = int(diff / 12)  # 0-29
+    tithi_name = TITHIS[tithi_idx % 15]
+    paksha = "Shukla" if tithi_idx < 15 else "Krishna"
+    tithi = f"{paksha} {tithi_name}"
+
+    # Nakshatra: Moon's nakshatra (27 nakshatras × 13°20')
+    nakshatra_idx = int(moon_lon / (360 / 27)) % 27
+    nakshatra = NAKSHATRAS[nakshatra_idx]
+
+    # Yoga: (Sun + Moon) / 13°20' — 27 yogas
+    yoga_lon = (sun_lon + moon_lon) % 360
+    yoga_idx = int(yoga_lon / (360 / 27)) % 27
+    yoga = YOGAS[yoga_idx]
+
+    # Moon sign
+    moon_sign_idx = int(moon_lon / 30) % 12
+    moon_signs = [
+        "Mesha", "Vrishabha", "Mithuna", "Karka",
+        "Simha", "Kanya", "Tula", "Vrishchika",
+        "Dhanu", "Makara", "Kumbha", "Meena",
+    ]
+    moon_sign = moon_signs[moon_sign_idx]
+
+    return {
+        "tithi": tithi,
+        "nakshatra": nakshatra,
+        "yoga": yoga,
+        "moon_sign": moon_sign,
+        "date_ist": now_ist.strftime("%d %B %Y"),
+    }
+
+
+def _get_energy_summary(panchang: dict) -> str:
+    """Call Claude to generate a 2-3 sentence energy-of-the-day summary."""
+    prompt = f"""You are Hardev, a learned Vedic astrologer. Today's Panchang is:
+- Tithi: {panchang['tithi']}
+- Nakshatra: {panchang['nakshatra']}
+- Yoga: {panchang['yoga']}
+- Moon in: {panchang['moon_sign']}
+
+Write exactly 2-3 sentences describing the cosmic energy of today — what themes, qualities, and activities are supported by these planetary conditions. Be specific to these exact Panchang values. Warm, learned tone. No death language. No bullet points — flowing prose only."""
+
+    client = anthropic.Anthropic(api_key=settings.anthropic_api_key)
+    response = client.messages.create(
+        model="claude-opus-4-5",
+        max_tokens=200,
+        messages=[{"role": "user", "content": prompt}],
+    )
+    return response.content[0].text.strip()
+
+
 # ─── Schemas ─────────────────────────────────────────────────────────────────
+
+
+class PanchangResponse(BaseModel):
+    tithi: str
+    nakshatra: str
+    yoga: str
+    moon_sign: str
+    date_ist: str
+    energy_summary: str
 
 
 class PublicKundliRequest(BaseModel):
@@ -77,6 +184,37 @@ class InterpretResponse(BaseModel):
 
 
 # ─── Endpoints ───────────────────────────────────────────────────────────────
+
+
+@router.get("/public/panchang/today", response_model=PanchangResponse)
+def get_today_panchang() -> PanchangResponse:
+    """Return today's Panchang (Tithi, Nakshatra, Yoga, Moon sign) with AI energy summary.
+
+    Cached in memory per IST date — Claude is called at most once per day.
+    No auth required.
+    """
+    today = _get_ist_date()
+    if today in _panchang_cache:
+        return PanchangResponse(**_panchang_cache[today])
+
+    panchang = _compute_panchang()
+    try:
+        energy_summary = _get_energy_summary(panchang)
+    except Exception:
+        energy_summary = (
+            f"The Moon in {panchang['moon_sign']} under {panchang['nakshatra']} nakshatra "
+            f"during {panchang['tithi']} tithi brings a day of reflection and inner awareness. "
+            f"The {panchang['yoga']} yoga supports mindful action and thoughtful decisions."
+        )
+
+    result = {**panchang, "energy_summary": energy_summary}
+    _panchang_cache[today] = result
+    # Evict old cache entries (keep only today)
+    for k in list(_panchang_cache.keys()):
+        if k != today:
+            del _panchang_cache[k]
+
+    return PanchangResponse(**result)
 
 
 @router.post("/public/kundli", response_model=PublicKundliResponse)
