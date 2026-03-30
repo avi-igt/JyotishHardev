@@ -15,9 +15,11 @@ import type { OnboardingStackParams } from '../../navigation/AppNavigator';
 import { Colors, Fonts, FontSize, Spacing, Radius } from '../../theme';
 import { supabase, onboarding } from '../../services/api';
 
+import type { OnboardingPayload } from '../../services/api';
+
 type Props = StackScreenProps<OnboardingStackParams, 'SignUp'>;
 
-export default function SignUpScreen({ route }: Props) {
+export default function SignUpScreen({ route, navigation }: Props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -71,16 +73,26 @@ export default function SignUpScreen({ route }: Props) {
 
     // Step 2: Create profile + chart using the token directly (session may not be persisted yet)
     setStatus('Computing your Kundali...');
+    let chartResult: Awaited<ReturnType<typeof onboarding.createProfile>> | undefined;
     try {
-      const payload = route.params.profilePayload as Parameters<typeof onboarding.createProfile>[0];
-      await onboarding.createProfile(payload, token);
+      const payload = route.params.profilePayload as OnboardingPayload;
+      chartResult = await onboarding.createProfile(payload, token);
     } catch (err: unknown) {
-      console.error('Profile creation failed:', err);
+      const message = err instanceof Error ? err.message : 'Failed to create your chart. Please try again.';
+      setError(message);
+      setLoading(false);
+      setStatus('');
+      return;
     }
 
-    // Step 3: Auth state change in AppNavigator will now switch to MainTabs
+    // Step 3: Navigate to loading animation — auth state change will then switch to MainTabs
     setStatus('');
     setLoading(false);
+    navigation.navigate('KundaliGenerating', {
+      profilePayload: route.params.profilePayload,
+      token,
+      chartResult,
+    });
   };
 
   return (

@@ -37,8 +37,8 @@ const PLANET_SEQUENCE = [
 
 const STEP_DURATION = 400; // ms per planet
 
-export default function KundaliGeneratingScreen({ route, navigation }: Props) {
-  const { profilePayload } = route.params ?? {};
+export default function KundaliGeneratingScreen({ route }: Props) {
+  const { profilePayload, token, chartResult } = route.params ?? {};
 
   const [currentPlanet, setCurrentPlanet] = useState(0);
   const [placedPlanets, setPlacedPlanets] = useState<string[]>([]);
@@ -55,31 +55,37 @@ export default function KundaliGeneratingScreen({ route, navigation }: Props) {
   }, []);
 
   useEffect(() => {
-    // Create the profile via API
-    const createProfile = async () => {
-      try {
-        const payload = profilePayload as Parameters<typeof onboarding.createProfile>[0];
-        const result = await onboarding.createProfile(payload);
-
-        // Extract planet signs from chart_json for the animation
-        if (result.kundali?.chart_json) {
-          const chart = result.kundali.chart_json as Record<string, unknown>;
-          const positions = chart.positions as Record<string, { sign: string }> | undefined;
-          if (positions) {
-            const signs: Record<string, string> = {};
-            for (const [planet, data] of Object.entries(positions)) {
-              signs[planet] = data.sign;
-            }
-            setPlanetSigns(signs);
-          }
+    // If chartResult was passed from SignUpScreen, use it directly.
+    // Otherwise fall back to creating the profile here (with explicit token).
+    const loadChart = async () => {
+      let result = chartResult;
+      if (!result) {
+        try {
+          const payload = profilePayload as Parameters<typeof onboarding.createProfile>[0];
+          result = await onboarding.createProfile(payload, token);
+        } catch (err: unknown) {
+          const message = err instanceof Error ? err.message : 'Unknown error';
+          setError(message);
+          return;
         }
-      } catch (err: unknown) {
-        const message = err instanceof Error ? err.message : 'Unknown error';
-        setError(message);
+      }
+
+      // Extract planet signs from chart_json for the animation
+      if (result?.kundali?.chart_json) {
+        const chart = result.kundali.chart_json as Record<string, unknown>;
+        const positions = chart.positions as Record<string, { sign: string }> | undefined;
+        if (positions) {
+          const signs: Record<string, string> = {};
+          for (const [planet, data] of Object.entries(positions)) {
+            signs[planet] = data.sign;
+          }
+          setPlanetSigns(signs);
+        }
       }
     };
 
-    createProfile();
+    loadChart();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Animate planets one by one
@@ -120,9 +126,7 @@ export default function KundaliGeneratingScreen({ route, navigation }: Props) {
   }, [currentPlanet, reducedMotion]);
 
   const handleComplete = () => {
-    // Navigate to the main app — no intermediate "success" screen
     // Auth state change in AppNavigator will transition to MainTabs automatically
-    // No explicit reset needed here
   };
 
   const progressBarWidth = progressAnim.interpolate({
