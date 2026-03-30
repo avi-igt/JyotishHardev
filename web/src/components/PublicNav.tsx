@@ -15,6 +15,7 @@ const NAV_LINKS = [
   { label: 'Transits',     href: '/transits',     key: 'transits' },
   { label: 'Library',      href: '/library',      key: 'library' },
   { label: 'Predictions',  href: '/predictions',  key: 'predictions' },
+  { label: 'About',        href: '/about',        key: 'about' },
 ];
 
 export default function PublicNav({ activePage }: PublicNavProps) {
