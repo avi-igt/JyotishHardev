@@ -1,31 +1,23 @@
 /**
- * /about — About Jyotish Hardev.
+ * /about — About Hardev, the Jyotish astrologer.
  */
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
 import PublicNav from '@/components/PublicNav';
 
-const PILLARS = [
+const SECTIONS = [
   {
-    icon: '◉',
-    title: 'Precision Ephemeris',
-    body: 'Planetary positions are computed using Swiss Ephemeris — the gold standard in Vedic chart calculation. No guesswork, pure mathematics.',
+    heading: 'My Approach',
+    body: `I believe Vedic Astrology is most powerful when it meets you where you are — not in abstract symbols and distant planets, but in the real, lived moments of your life. Career crossroads. Relationship questions. Times when nothing seems to make sense, and you need a deeper lens to see through.
+
+When we sit together, I don't just read a chart. I listen to your story, and I help you see how the cosmos reflects it back. Every reading is a conversation — rooted in tradition, but spoken in a language that is yours.`,
   },
   {
-    icon: '◉',
-    title: 'Persistent Memory',
-    body: 'Unlike every other astrology app, Hardev remembers every session. He recalls past conversations and builds on them over time.',
-  },
-  {
-    icon: '◉',
-    title: 'Measured Accuracy',
-    body: 'When you confirm a prediction, Hardev tracks it. Over time, he builds an accuracy score — so you can see how well Vedic astrology applies to your life.',
-  },
-  {
-    icon: '◉',
-    title: 'Two Great Traditions',
-    body: 'Choose between Parashara and Jaimini traditions at onboarding. Your chosen tradition shapes every reading, every prediction, every conversation.',
+    heading: 'Why Jyotish?',
+    body: `In Sanskrit, Jyotish means the science of light — and that is exactly what I hope every reading brings you. Not answers handed down from above, but clarity that rises from within. A gentle illumination of what is already true about you.
+
+This tradition has been passed down through generations of dedicated practitioners, and I carry it with deep reverence. At the same time, I hold space for you as a modern person navigating a complex world. Ancient wisdom and present reality are not opposites — they are companions.`,
   },
 ];
 
@@ -33,105 +25,103 @@ const AboutPage: NextPage = () => {
   return (
     <>
       <Head>
-        <title>About — Jyotish Hardev</title>
-        <meta name="description" content="Jyotish Hardev is your personal AI Vedic astrologer — powered by classical wisdom, Swiss Ephemeris, and persistent memory." />
+        <title>About Hardev — Jyotish Hardev</title>
+        <meta name="description" content="My name is Hardev. I'm here to help you listen to what the stars have always been speaking — through the ancient science of Jyotish." />
       </Head>
 
       <PublicNav activePage="about" />
 
       <main style={{ background: '#0e1235', minHeight: '100vh', color: '#e8e0d0' }}>
-        <div style={{ maxWidth: 720, margin: '0 auto', padding: '60px 24px 80px' }}>
+        <div style={{ maxWidth: 680, margin: '0 auto', padding: '64px 24px 88px' }}>
 
           {/* Hero */}
+          <p style={{
+            fontSize: 13, fontWeight: 600, letterSpacing: '1.6px',
+            textTransform: 'uppercase', color: 'rgba(201,168,76,0.7)',
+            marginBottom: 20,
+          }}>
+            About
+          </p>
           <h1 style={{
             fontFamily: "'Tiro Devanagari Hindi', Georgia, serif",
-            fontSize: 36, fontWeight: 700,
-            color: '#c9a84c', marginBottom: 16, lineHeight: 1.25,
+            fontSize: 38, fontWeight: 700, lineHeight: 1.2,
+            color: '#ffffff', marginBottom: 32,
           }}>
-            About Jyotish Hardev
+            The stars have always been speaking.<br />
+            I'm here to help you listen.
           </h1>
-          <p style={{ fontSize: 18, color: '#e8e0d0', lineHeight: 1.7, marginBottom: 48 }}>
-            Jyotish Hardev is your personal AI Astrologer — powered by
-            classical Vedic wisdom and modern artificial intelligence.
+          <p style={{ fontSize: 17, color: 'rgba(232,224,208,0.85)', lineHeight: 1.8, marginBottom: 48 }}>
+            My name is Hardev, and for as long as I can remember, I've been drawn to the ancient
+            wisdom of Jyotish — the sacred science of light that has guided seekers for thousands
+            of years.
+          </p>
+          <p style={{ fontSize: 17, color: 'rgba(232,224,208,0.85)', lineHeight: 1.8, marginBottom: 64 }}>
+            Jyotish isn't about predicting a fixed fate. It's about understanding the rhythm of
+            your life — the seasons of your soul. Your birth chart is not a verdict. It's a map.
+            And like any map, it only becomes useful when someone helps you read it.
           </p>
 
-          {/* Mission card */}
-          <div style={{
-            background: '#1b1f4a',
-            borderRadius: 16,
-            padding: '32px 28px',
-            marginBottom: 56,
-            borderLeft: '4px solid #c9a84c',
-          }}>
+          {/* Divider */}
+          <div style={{ width: 48, height: 2, background: '#c9a84c', marginBottom: 64, opacity: 0.5 }} />
+
+          {/* Body sections */}
+          {SECTIONS.map(section => (
+            <div key={section.heading} style={{ marginBottom: 56 }}>
+              <h2 style={{
+                fontFamily: "'Tiro Devanagari Hindi', Georgia, serif",
+                fontSize: 22, fontWeight: 700,
+                color: '#c9a84c', marginBottom: 20,
+              }}>
+                {section.heading}
+              </h2>
+              {section.body.split('\n\n').map((para, i) => (
+                <p key={i} style={{
+                  fontSize: 16, color: 'rgba(232,224,208,0.8)',
+                  lineHeight: 1.85, marginBottom: 18,
+                }}>
+                  {para}
+                </p>
+              ))}
+            </div>
+          ))}
+
+          {/* Divider */}
+          <div style={{ width: 48, height: 2, background: '#c9a84c', marginBottom: 56, opacity: 0.5 }} />
+
+          {/* Closing section */}
+          <div style={{ marginBottom: 64 }}>
+            <h2 style={{
+              fontFamily: "'Tiro Devanagari Hindi', Georgia, serif",
+              fontSize: 22, fontWeight: 700,
+              color: '#c9a84c', marginBottom: 20,
+            }}>
+              Let's Walk This Path Together
+            </h2>
+            <p style={{ fontSize: 16, color: 'rgba(232,224,208,0.8)', lineHeight: 1.85, marginBottom: 18 }}>
+              Whether you are new to Jyotish or have been exploring it for years, I welcome you
+              here. There is no perfect moment to begin — only this one.
+            </p>
+            <p style={{ fontSize: 16, color: 'rgba(232,224,208,0.8)', lineHeight: 1.85, marginBottom: 32 }}>
+              I'd be honoured to read the stars with you.
+            </p>
             <p style={{
               fontFamily: "'Tiro Devanagari Hindi', Georgia, serif",
-              fontSize: 20, color: '#c9a84c',
-              lineHeight: 1.5, marginBottom: 16,
+              fontSize: 18, color: '#c9a84c', fontStyle: 'italic',
             }}>
-              "Astrology is only meaningful when it remembers you."
-            </p>
-            <p style={{ fontSize: 15, color: 'rgba(232,224,208,0.8)', lineHeight: 1.75 }}>
-              Most astrology apps treat every session as if it were the first.
-              Hardev is different. He keeps a memory of your readings, tracks
-              which predictions came true, and grows more insightful with every
-              conversation.
-            </p>
-          </div>
-
-          {/* Pillars */}
-          <h2 style={{
-            fontSize: 11, fontWeight: 700, letterSpacing: '1.4px',
-            textTransform: 'uppercase', color: 'rgba(232,224,208,0.45)',
-            marginBottom: 28,
-          }}>
-            What makes Hardev different
-          </h2>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 28, marginBottom: 56 }}>
-            {PILLARS.map(pillar => (
-              <div key={pillar.title} style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
-                <span style={{ fontSize: 18, color: '#c9a84c', flexShrink: 0, marginTop: 3 }}>
-                  {pillar.icon}
-                </span>
-                <div>
-                  <p style={{ fontSize: 16, fontWeight: 600, color: '#e8e0d0', marginBottom: 6 }}>
-                    {pillar.title}
-                  </p>
-                  <p style={{ fontSize: 14, color: 'rgba(232,224,208,0.65)', lineHeight: 1.7 }}>
-                    {pillar.body}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Privacy note */}
-          <div style={{
-            background: '#1b1f4a',
-            borderRadius: 12,
-            padding: '20px 24px',
-            marginBottom: 48,
-            border: '1px solid rgba(255,255,255,0.08)',
-          }}>
-            <p style={{ fontSize: 13, color: 'rgba(232,224,208,0.5)', lineHeight: 1.7, textAlign: 'center' }}>
-              Hardev respects your privacy. Your birth details and reading
-              history are encrypted at rest and never sold. You can delete
-              everything from Account → Delete my data.
+              — Hardev
             </p>
           </div>
 
           {/* CTA */}
-          <div style={{ textAlign: 'center' }}>
-            <Link href="/signup" style={{
-              display: 'inline-block',
-              background: '#c9a84c', color: '#1b1f4a',
-              fontWeight: 700, fontSize: 15,
-              padding: '14px 36px', borderRadius: 28,
-              textDecoration: 'none',
-            }}>
-              Get started free
-            </Link>
-          </div>
+          <Link href="/signup" style={{
+            display: 'inline-block',
+            background: '#c9a84c', color: '#1b1f4a',
+            fontWeight: 700, fontSize: 15,
+            padding: '14px 36px', borderRadius: 28,
+            textDecoration: 'none',
+          }}>
+            Begin your reading
+          </Link>
 
         </div>
       </main>
