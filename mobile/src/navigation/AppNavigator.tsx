@@ -24,10 +24,12 @@ import KundaliGeneratingScreen from '../screens/onboarding/KundaliGeneratingScre
 import SignUpScreen from '../screens/onboarding/SignUpScreen';
 
 // ─── Main app screens ────────────────────────────────────────────────────────────
+import HomeScreen from '../screens/HomeScreen';
 import DashboardScreen from '../screens/DashboardScreen';
 import ConversationScreen from '../screens/ConversationScreen';
 import EventsScreen from '../screens/EventsScreen';
 import AccountScreen from '../screens/AccountScreen';
+import AboutUsScreen from '../screens/AboutUsScreen';
 
 // ─── Stack + Tab types ──────────────────────────────────────────────────────────
 
@@ -38,14 +40,20 @@ export type OnboardingStackParams = {
   Tradition: { pob: string; pob_lat: number; pob_lon: number; pob_timezone: string; pob_timezone_offset: number; dob: string; tob?: string; tob_unknown: boolean };
   DPDPA: OnboardingStackParams['Tradition'] & { tradition: 'parashara' | 'jaimini' };
   SignUp: { profilePayload: Record<string, unknown> };
-  KundaliGenerating: { profilePayload: Record<string, unknown> };
+  KundaliGenerating: {
+    profilePayload: Record<string, unknown>;
+    token: string;
+    chartResult?: { kundali?: { chart_json?: Record<string, unknown> } };
+  };
 };
 
 export type MainTabParams = {
+  Home: undefined;
   Dashboard: undefined;
   Conversation: undefined;
   Events: undefined;
   Account: undefined;
+  AboutUs: undefined;
 };
 
 const OnboardingStack = createStackNavigator<OnboardingStackParams>();
@@ -81,10 +89,12 @@ function OnboardingNavigator() {
 
 function TabIcon({ label, focused }: { label: string; focused: boolean }) {
   const icons: Record<string, string> = {
+    Home: '⌂',
     Dashboard: '◎',
     Conversation: '✉',
     Events: '◈',
     Account: '○',
+    AboutUs: 'ℹ',
   };
   return (
     <Text style={{ fontSize: 20, color: focused ? Colors.primary : Colors.muted }}>
@@ -118,9 +128,14 @@ function MainNavigator() {
       })}
     >
       <MainTab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{ tabBarLabel: 'Home' }}
+      />
+      <MainTab.Screen
         name="Dashboard"
         component={DashboardScreen}
-        options={{ tabBarLabel: 'Home' }}
+        options={{ tabBarLabel: 'My Kundali' }}
       />
       <MainTab.Screen
         name="Conversation"
@@ -136,6 +151,11 @@ function MainNavigator() {
         name="Account"
         component={AccountScreen}
         options={{ tabBarLabel: 'Account' }}
+      />
+      <MainTab.Screen
+        name="AboutUs"
+        component={AboutUsScreen}
+        options={{ tabBarLabel: 'About Us' }}
       />
     </MainTab.Navigator>
   );
