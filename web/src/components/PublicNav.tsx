@@ -11,11 +11,12 @@ interface PublicNavProps {
 }
 
 const NAV_LINKS = [
-  { label: 'Daily Brief',  href: '/daily',       key: 'daily' },
+  { label: 'About',        href: '/about',        key: 'about' },
+  { label: 'Daily Brief',  href: '/daily',        key: 'daily' },
   { label: 'Transits',     href: '/transits',     key: 'transits' },
   { label: 'Library',      href: '/library',      key: 'library' },
+  { label: 'Palmistry',    href: '/palmistry',    key: 'palmistry' },
   { label: 'Predictions',  href: '/predictions',  key: 'predictions' },
-  { label: 'About',        href: '/about',        key: 'about' },
 ];
 
 export default function PublicNav({ activePage }: PublicNavProps) {
