@@ -51,7 +51,7 @@ const AboutPage: NextPage = () => {
             I'm here to help you listen.
           </h1>
           <p style={{ fontSize: 17, color: 'rgba(232,224,208,0.85)', lineHeight: 1.8, marginBottom: 48 }}>
-            My name is Hardev, and for as long as I can remember, I've been drawn to the ancient
+            My name is Hardev, I am your virtual AI astrologer. For as long as I can remember, I've been drawn to the ancient
             wisdom of Jyotish — the sacred science of light that has guided seekers for thousands
             of years.
           </p>
