@@ -12,7 +12,7 @@ interface AuthContext {
 const AuthCtx = createContext<AuthContext>({ session: null, loading: true });
 export const useAuth = () => useContext(AuthCtx);
 
-const PUBLIC_ROUTES = ['/', '/login', '/signup', '/share', '/daily', '/transits', '/library', '/predictions', '/nakshatras', '/rashis', '/kundli', '/about', '/palmistry'];
+const PUBLIC_ROUTES = ['/', '/login', '/signup', '/share', '/daily', '/transits', '/library', '/predictions', '/nakshatras', '/rashis', '/kundli', '/about', '/palmistry', '/til-vichar'];
 
 export default function App({ Component, pageProps }: AppProps) {
   const [session, setSession] = useState<Session | null>(null);

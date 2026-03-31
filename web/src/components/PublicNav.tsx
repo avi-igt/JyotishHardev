@@ -16,6 +16,7 @@ const NAV_LINKS = [
   { label: 'Transits',     href: '/transits',     key: 'transits' },
   { label: 'Library',      href: '/library',      key: 'library' },
   { label: 'Palmistry',    href: '/palmistry',    key: 'palmistry' },
+  { label: 'Til Vichar',   href: '/til-vichar',   key: 'til-vichar' },
   { label: 'Predictions',  href: '/predictions',  key: 'predictions' },
 ];
 
