@@ -201,36 +201,10 @@ const HomePage: NextPage = () => {
   const [result, setResult] = useState<KundliResult | null>(null);
   const [error, setError] = useState('');
 
-  const [aiLoading, setAiLoading] = useState(false);
-  const [aiResult, setAiResult] = useState<{ personality: string; career: string; finances: string; family: string; health: string } | null>(null);
-  const [aiError, setAiError] = useState('');
   const [copied, setCopied] = useState(false);
 
   const pobRef = useRef<HTMLInputElement>(null);
   const autocompleteRef = useRef<any>(null);
-
-  const handleAiInterpret = async () => {
-    if (!result) return;
-    setAiLoading(true);
-    setAiError('');
-    try {
-      const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-      const res = await fetch(`${apiBase}/api/v1/kundli/interpret`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(result),
-      });
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        throw new Error(err.detail ?? 'Could not generate reading. Please try again.');
-      }
-      setAiResult(await res.json());
-    } catch (err: any) {
-      setAiError(err.message ?? 'Could not generate reading. Please try again.');
-    } finally {
-      setAiLoading(false);
-    }
-  };
 
   // Attach Google Places autocomplete to the POB input.
   // Handles both first load (script not yet present) and client-side
@@ -558,28 +532,6 @@ const HomePage: NextPage = () => {
                   </div>
                 );
 
-                if (aiResult) {
-                  return (
-                    <div className="interp-section">
-                      <div className="ai-badge">✦ AI Reading by Hardev</div>
-                      <h3 className="section-title">Your Personalised Reading</h3>
-                      {luckyBlock}
-                      {[
-                        { icon: '🪐', label: 'Personality', text: aiResult.personality },
-                        { icon: '💼', label: 'Career', text: aiResult.career },
-                        { icon: '💰', label: 'Finances', text: aiResult.finances },
-                        { icon: '🏠', label: 'Family Life', text: aiResult.family },
-                        { icon: '🌿', label: 'Health', text: aiResult.health },
-                      ].map(({ icon, label, text }) => text ? (
-                        <div key={label} className="interp-block">
-                          <div className="interp-label">{icon} {label}</div>
-                          <p className="interp-text">{text}</p>
-                        </div>
-                      ) : null)}
-                    </div>
-                  );
-                }
-
                 return (
                   <>
                     {interp && (
@@ -606,16 +558,6 @@ const HomePage: NextPage = () => {
                       </div>
                     )}
 
-                    <div className="ai-banner">
-                      <div className="ai-banner-left">
-                        <div className="ai-banner-title">✦ Get your personalised AI reading</div>
-                        <div className="ai-banner-sub">Hardev analyses your exact planetary positions and speaks directly to your chart.</div>
-                      </div>
-                      <button className="ai-banner-btn" onClick={handleAiInterpret} disabled={aiLoading}>
-                        {aiLoading ? 'Reading…' : 'Get reading →'}
-                      </button>
-                    </div>
-                    {aiError && <div className="error-box" style={{ marginBottom: 16 }}>{aiError}</div>}
                   </>
                 );
               })()}
@@ -935,59 +877,6 @@ const HomePage: NextPage = () => {
 
         .lucky-label { font-size: 10px; color: #9b96a8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
         .lucky-value { font-size: 14px; font-weight: 700; color: #1b1f4a; }
-
-        /* ── AI badge ── */
-        .ai-badge {
-          display: inline-block;
-          background: #1b1f4a;
-          color: #c9a84c;
-          font-size: 12px;
-          font-weight: 700;
-          letter-spacing: 0.05em;
-          padding: 4px 12px;
-          border-radius: 20px;
-          margin-bottom: 12px;
-        }
-
-        /* ── AI banner ── */
-        .ai-banner {
-          background: #1b1f4a;
-          border-radius: 12px;
-          padding: 18px 20px;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 16px;
-          margin-bottom: 10px;
-        }
-
-        .ai-banner-left { flex: 1; }
-
-        .ai-banner-title {
-          font-size: 14px;
-          font-weight: 700;
-          color: #ffffff;
-          margin-bottom: 4px;
-        }
-
-        .ai-banner-sub { font-size: 12px; color: #a0a4c8; line-height: 1.5; }
-
-        .ai-banner-btn {
-          flex-shrink: 0;
-          background: transparent;
-          border: 1.5px solid #c9a84c;
-          color: #c9a84c;
-          font-size: 14px;
-          font-weight: 700;
-          padding: 10px 18px;
-          border-radius: 20px;
-          cursor: pointer;
-          text-decoration: none;
-          transition: background 150ms, color 150ms;
-          white-space: nowrap;
-        }
-        .ai-banner-btn:hover:not(:disabled) { background: #c9a84c; color: #1b1f4a; }
-        .ai-banner-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
         /* ── CTA card ── */
         .cta-section { margin-bottom: 24px; }
