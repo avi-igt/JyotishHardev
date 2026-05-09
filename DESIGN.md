@@ -1,7 +1,7 @@
 # JyotishHardev — Design Reference
 
 > Free, anonymous Vedic astrology website. No accounts, no payments, no database.
-> Updated: May 2026.
+> Updated: May 2026 (predictions populated, colour consistency across all pages).
 
 ---
 
@@ -80,20 +80,39 @@ If the classifier throws, show `FALLBACK_MESSAGE` — never expose raw LLM outpu
 
 ## Hardev's world predictions
 
-Hardcoded as a Python list `_WORLD_PREDICTIONS` at the bottom of `backend/app/api/public.py`.
-To add or update predictions: edit that list, deploy. No admin UI, no database.
+Hardcoded as a Python list `_WORLD_PREDICTIONS` in `backend/app/api/public.py`.
+To add or update predictions: edit that list directly, deploy. No admin UI, no database.
 
-Each entry:
+The page shows an accuracy percentage banner once at least one prediction is evaluated
+(status `"confirmed"` or `"missed"`). It is calculated automatically from the list.
+
+### Entry format
+
 ```python
 {
-    "id": "unique-string",
-    "topic": "India / Global / Technology / ...",
-    "text": "Prediction text here.",
-    "posted_at": "YYYY-MM-DD",
-    "target_date": "YYYY-MM-DD",  # optional
-    "status": "pending",  # or "confirmed" or "missed"
+    "id": "pred-001",                          # unique, never reuse
+    "topic": "India",                          # see topics below
+    "text": "Prediction text...",
+    "posted_at": "2025-01-15",                 # date Hardev posted it
+    "target_date": "2026-12-31",               # optional — when to evaluate
+    "status": "pending",                       # "pending" | "confirmed" | "missed"
 }
 ```
+
+### Topics in use
+
+`India` · `Global` · `Technology` · `Markets` · `Geopolitics`
+
+### Writing style
+
+Predictions are written in Hardev's voice — warm, specific, and grounded in Jyotish reasoning.
+Every prediction must cite a planetary justification (transit, nakshatra, dasha, or yoga).
+
+- **Good:** "Saturn's ingress into Pisces brings a testing period for speculative instruments..."
+- **Bad:** "Crypto will crash." (no Jyotish grounding, no specificity)
+
+Use first-person plural ("I foresee", "the stars indicate") sparingly. Prefer declarative
+statements of what the planets indicate, written as if the chart is speaking.
 
 ---
 
