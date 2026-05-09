@@ -204,6 +204,7 @@ const HomePage: NextPage = () => {
   const [aiLoading, setAiLoading] = useState(false);
   const [aiResult, setAiResult] = useState<{ personality: string; career: string; finances: string; family: string; health: string } | null>(null);
   const [aiError, setAiError] = useState('');
+  const [copied, setCopied] = useState(false);
 
   const pobRef = useRef<HTMLInputElement>(null);
   const autocompleteRef = useRef<any>(null);
@@ -281,46 +282,35 @@ const HomePage: NextPage = () => {
 
   const canSubmit = name.trim() && day && month && year && pob && pobLat !== null && pobLon !== null && pobTzOffset !== null && !loading;
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  // Core submission — accepts explicit values so it can be called both from
+  // the form (via handleSubmit) and from the URL-params auto-load effect.
+  const submitKundliWith = async (opts: {
+    name: string; dob: string; tob: string | null; tobUnknown: boolean;
+    pob: string; lat: number; lon: number; tz: number;
+  }) => {
     setError('');
     setResult(null);
     setLoading(true);
-
-    const dobYear = parseInt(year);
-    const dobMonth = months.indexOf(month) + 1;
-    const dobDay = parseInt(day);
-
-    let tob = null;
-    if (!tobUnknown) {
-      let h = parseInt(hour);
-      if (ampm === 'PM' && h !== 12) h += 12;
-      if (ampm === 'AM' && h === 12) h = 0;
-      tob = `${String(h).padStart(2,'0')}:${minute}:00`;
-    }
-
     try {
       const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
       const res = await fetch(`${apiBase}/api/v1/public/kundli`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name: name.trim(),
-          dob: `${dobYear}-${String(dobMonth).padStart(2,'0')}-${String(dobDay).padStart(2,'0')}`,
-          tob,
-          tob_unknown: tobUnknown,
-          pob,
-          pob_lat: pobLat,
-          pob_lon: pobLon,
-          pob_timezone_offset: pobTzOffset,
+          name: opts.name,
+          dob: opts.dob,
+          tob: opts.tob,
+          tob_unknown: opts.tobUnknown,
+          pob: opts.pob,
+          pob_lat: opts.lat,
+          pob_lon: opts.lon,
+          pob_timezone_offset: opts.tz,
         }),
       });
-
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
         throw new Error(err.detail ?? 'Chart computation failed');
       }
-
       setResult(await res.json());
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (err: any) {
@@ -328,6 +318,78 @@ const HomePage: NextPage = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const dobYear = parseInt(year);
+    const dobMonth = months.indexOf(month) + 1;
+    const dobDay = parseInt(day);
+    let tob: string | null = null;
+    if (!tobUnknown) {
+      let h = parseInt(hour);
+      if (ampm === 'PM' && h !== 12) h += 12;
+      if (ampm === 'AM' && h === 12) h = 0;
+      tob = `${String(h).padStart(2,'0')}:${minute}:00`;
+    }
+    await submitKundliWith({
+      name: name.trim(),
+      dob: `${dobYear}-${String(dobMonth).padStart(2,'0')}-${String(dobDay).padStart(2,'0')}`,
+      tob, tobUnknown, pob, lat: pobLat!, lon: pobLon!, tz: pobTzOffset!,
+    });
+  };
+
+  // Auto-load a shared Kundli from URL params (e.g. /?share=1&name=...&lat=...&tz=...).
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('share') !== '1') return;
+    const n   = params.get('name')   ?? '';
+    const d   = params.get('day')    ?? '';
+    const mo  = params.get('month')  ?? '';
+    const y   = params.get('year')   ?? '';
+    const h   = params.get('hour')   ?? '12';
+    const mi  = params.get('minute') ?? '00';
+    const ap  = (params.get('ampm')  ?? 'AM') as 'AM' | 'PM';
+    const tbu = params.get('tobUnknown') === '1';
+    const pb  = params.get('pob')    ?? '';
+    const lat = parseFloat(params.get('lat') ?? '');
+    const lon = parseFloat(params.get('lon') ?? '');
+    const tz  = parseFloat(params.get('tz')  ?? '');
+    if (!n || !d || !mo || !y || !pb || isNaN(lat) || isNaN(lon) || isNaN(tz)) return;
+    // Pre-fill form state so "← New Kundli" returns to a populated form
+    setName(n); setDay(d); setMonth(mo); setYear(y);
+    setHour(h); setMinute(mi); setAmpm(ap); setTobUnknown(tbu);
+    setPob(pb); setPobLat(lat); setPobLon(lon); setPobTzOffset(tz);
+    // Build dob/tob and submit directly with the parsed values
+    const dobYear = parseInt(y);
+    const dobMonth = months.indexOf(mo) + 1;
+    const dobDay = parseInt(d);
+    let tob: string | null = null;
+    if (!tbu) {
+      let hNum = parseInt(h);
+      if (ap === 'PM' && hNum !== 12) hNum += 12;
+      if (ap === 'AM' && hNum === 12) hNum = 0;
+      tob = `${String(hNum).padStart(2,'0')}:${mi}:00`;
+    }
+    submitKundliWith({ name: n, dob: `${dobYear}-${String(dobMonth).padStart(2,'0')}-${String(dobDay).padStart(2,'0')}`, tob, tobUnknown: tbu, pob: pb, lat, lon, tz });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleShare = () => {
+    const params = new URLSearchParams({
+      share: '1', name, day, month, year, hour, minute, ampm,
+      tobUnknown: tobUnknown ? '1' : '0',
+      pob, lat: String(pobLat), lon: String(pobLon), tz: String(pobTzOffset),
+    });
+    const url = `${window.location.origin}/?${params.toString()}`;
+    navigator.clipboard.writeText(url).catch(() => {
+      // Fallback for browsers that block clipboard without HTTPS
+      const el = document.createElement('textarea');
+      el.value = url; document.body.appendChild(el); el.select();
+      document.execCommand('copy'); document.body.removeChild(el);
+    }).finally(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
   };
 
   const currentYear = new Date().getFullYear();
@@ -444,9 +506,14 @@ const HomePage: NextPage = () => {
           ) : (
             <div className="results">
               <div className="results-header">
-                <button className="new-kundli-btn" onClick={() => { setResult(null); setAiResult(null); setAiError(''); }}>
-                  ← New Kundli
-                </button>
+                <div className="results-actions">
+                  <button className="new-kundli-btn" onClick={() => { setResult(null); setAiResult(null); setAiError(''); }}>
+                    ← New Kundli
+                  </button>
+                  <button className="share-btn" onClick={handleShare}>
+                    {copied ? '✓ Copied!' : 'Share ↗'}
+                  </button>
+                </div>
                 <h2 className="results-name">{result.name}&apos;s Kundli</h2>
                 {result.tob_unknown && (
                   <p className="tob-notice">Birth time unknown — noon chart used. Lagna may be inaccurate.</p>
@@ -684,14 +751,25 @@ const HomePage: NextPage = () => {
         .results { }
 
         .results-header { text-align: center; margin-bottom: 24px; }
+        .results-actions {
+          display: flex; gap: 8px; justify-content: center; margin-bottom: 16px;
+        }
         .new-kundli-btn {
           display: inline-flex; align-items: center; gap: 4px;
           background: none; border: 1px solid rgba(27,31,74,0.2);
           border-radius: 20px; padding: 6px 14px; font-size: 13px;
-          color: #6b6b8a; cursor: pointer; margin-bottom: 16px;
+          color: #6b6b8a; cursor: pointer;
           transition: border-color 150ms, color 150ms;
         }
         .new-kundli-btn:hover { border-color: #1b1f4a; color: #1b1f4a; }
+        .share-btn {
+          display: inline-flex; align-items: center; gap: 4px;
+          background: none; border: 1px solid rgba(27,31,74,0.2);
+          border-radius: 20px; padding: 6px 14px; font-size: 13px;
+          color: #6b6b8a; cursor: pointer;
+          transition: border-color 150ms, color 150ms;
+        }
+        .share-btn:hover { border-color: #c9a84c; color: #c9a84c; }
 
         .results-name {
           font-family: 'Tiro Devanagari Hindi', Georgia, serif;

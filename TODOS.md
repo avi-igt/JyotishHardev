@@ -7,17 +7,27 @@
 - [x] Daily Cosmic Brief (Panchang) — Tithi, Nakshatra, Yoga, Moon sign + AI energy summary
 - [x] Transits — current sidereal positions of all 9 grahas
 - [x] Library — all 27 Nakshatras and 12 Rashis with descriptions
-- [x] Palmistry guide — static educational content
-- [x] Til Vichar guide — static educational content
-- [x] Hardev's world predictions — hardcoded, editable in public.py
+- [x] Palmistry guide — 8 tabbed sections, Hasta Samudrika Shastra
+- [x] Til Vichar guide — 9 tabbed sections, Vedic mole reading
+- [x] Hardev's world predictions — 12 predictions (4 confirmed, 8 pending), hardcoded in public.py
 - [x] CORS open to all origins — no env var config needed
 - [x] No database, no auth, no billing — fully stateless backend
+- [x] POB autocomplete — Google Places, full formatted address, dropdown styled
+- [x] Color consistency — all pages use cream (#f5f0e8) background, indigo text palette
+- [x] Rate limiting on `/kundli/interpret` — 10 requests/hour per IP via slowapi
+- [x] Share Kundli — "Share ↗" button copies URL with encoded birth details; auto-loads on visit
 
 ## Near-term improvements
 
-- [ ] Rate limiting on `/kundli/interpret` — currently unmetered, monitor Claude costs
-- [ ] POB autocomplete: Google Places hook not wired in homepage (lat/lon fallback works)
-- [ ] Add real world predictions to `_WORLD_PREDICTIONS` in `backend/app/api/public.py`
+- [ ] Google Places Autocomplete uses deprecated widget — monitor for breakage, migrate when needed
+- [ ] 404 page — unknown routes show default Next.js blank; add a branded page
+- [ ] Mobile nav audit — tab bars on palmistry and til-vichar have many tabs; check on small screens
+- [ ] Favicon and OG image — verify social sharing previews render correctly
+
+## Content maintenance
+
+- [ ] Predictions — review pending predictions quarterly; mark confirmed or missed as events resolve
+- [ ] About page — currently brief; could expand with more about the Jyotish tradition
 
 ## Design polish
 
@@ -34,4 +44,3 @@
 - Astrologer CRM (B2B)
 - Family Kundali graph
 - Jaimini Chara Dasha
-- DPDPA `/account/delete` (only needed when user accounts exist)

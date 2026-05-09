@@ -8,10 +8,11 @@ from typing import Optional
 
 import swisseph as swe
 import anthropic
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, Request, status
 from pydantic import BaseModel
 
 from app.core.config import settings
+from app.core.limiter import limiter
 from app.services.chart import compute_chart, compute_vimshottari_dasha
 from app.services.classifier import classify, ClassifierError, FALLBACK_MESSAGE
 
@@ -263,7 +264,8 @@ def compute_public_kundli(body: PublicKundliRequest) -> PublicKundliResponse:
 
 
 @router.post("/kundli/interpret", response_model=InterpretResponse)
-def interpret_kundli(body: InterpretRequest) -> InterpretResponse:
+@limiter.limit("10/hour")
+def interpret_kundli(request: Request, body: InterpretRequest) -> InterpretResponse:
     """AI-powered Kundli interpretation — free for all, no auth required.
 
     Calls Claude to generate personalised sections for personality,
@@ -310,7 +312,7 @@ Tone: warm, learned, specific. Like a trusted family astrologer. Never use death
     client = anthropic.Anthropic(api_key=settings.anthropic_api_key)
     try:
         response = client.messages.create(
-            model="claude-opus-4-5",
+            model="claude-sonnet-4-6",
             max_tokens=1200,
             messages=[{"role": "user", "content": prompt}],
         )
