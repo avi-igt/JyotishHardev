@@ -22,9 +22,9 @@ No login, no subscription, nothing to install.
 | `/transits` | Current sidereal positions of all 9 grahas (Lahiri ayanamsha) |
 | `/predictions` | Hardev's world predictions with accuracy tracking |
 | `/library` | Index of all 27 Nakshatras and 12 Rashis with descriptions |
-| `/palmistry` | Static palm reading educational guide |
-| `/til-vichar` | Static Tithi / Nakshatra / Yoga guide |
-| `/about` | About the project |
+| `/palmistry` | Hasta Samudrika Shastra — palm reading educational guide (8 tabbed sections) |
+| `/til-vichar` | Til Vichar — Vedic mole reading by color, shape, and body location (9 tabbed sections) |
+| `/about` | About Hardev and the Jyotish approach |
 | `/nakshatras/[slug]` | Individual Nakshatra detail page |
 | `/rashis/[slug]` | Individual Rashi detail page |
 
@@ -101,18 +101,23 @@ Each entry:
 
 ### Colour palette
 
+All pages use a consistent cream-and-indigo palette. No page should have a dark/navy page background.
+
 | Token | Hex | Use |
 |-------|-----|-----|
-| Background | `#F5F0E8` | Page background — warm cream |
-| Surface | `#FFFFFF` | Cards |
-| Primary | `#1B1F4A` | Headers, nav, primary actions — deep indigo |
-| Accent | `#C9A84C` | Borders, icons, active states — temple gold |
-| Text | `#1A1A2E` | Body copy |
-| Muted | `#6B6B8A` | Secondary text, labels |
+| Background | `#F5F0E8` | Page background — warm cream, used on every page |
+| Surface | `#FFFFFF` | Cards, header strips, sticky tab bars |
+| Primary | `#1B1F4A` | Page headings, nav logo — deep indigo |
+| Body text | `#3A3A5C` | Body paragraphs, descriptions, secondary content |
+| Text dark | `#1A1A2E` | Highest-contrast text (table values, interactive labels) |
+| Labels | `#6B6B8A` | Overline labels, small captions, metadata — lightest readable |
+| Accent | `#C9A84C` | Decorative borders, icons, "Learn more →" links — temple gold |
 | Error | `#C0392B` | Errors only |
 | Success | `#27AE60` | Confirmation |
 
-**Gold (#C9A84C) is decorative only — never use it for text.** It fails contrast at 2.9:1.
+**Gold (#C9A84C) is decorative only — never use it for body text.** It fails contrast at 2.9:1 on cream.
+
+**White (#FFFFFF) text is only valid on coloured button backgrounds** (e.g. rose `#8B2252`, gold `#C9A84C`). Never use white text on cream or white card backgrounds.
 
 ### Typography
 
@@ -168,8 +173,9 @@ Fixed minimum 320×320px. Horizontal scroll on viewports narrower than 320px.
 
 ## Accessibility
 
-- Indigo on cream: 12.1:1 contrast ✓ (exceeds AAA)
-- All body text: minimum 4.5:1 contrast ratio
+- `#1B1F4A` on `#F5F0E8` (indigo on cream): 12.1:1 contrast ✓ (exceeds AAA)
+- `#3A3A5C` on `#F5F0E8` (body text on cream): ~7.5:1 contrast ✓ (exceeds AA)
+- `#6B6B8A` on `#F5F0E8` (labels on cream): ~4.5:1 contrast ✓ (meets AA minimum)
 - All touch targets: minimum 44×44px
 - Kundali chart houses: `aria-label="House N: [planets]"`
 - `prefers-reduced-motion`: replace planetary animation with a progress bar
@@ -185,6 +191,9 @@ and a Family Kundali graph. All of it was removed in May 2026.
 **Reason:** The owner has no intention of monetising the site and wants zero maintenance burden.
 The free, stateless version delivers the core value (instant Kundli + AI reading) at
 essentially zero operating cost (Railway free tier + Claude API pay-per-use).
+
+There are no prompts to create an account, sign up, or log in anywhere on the site.
+If any page surfaces such language it is a bug — remove it.
 
 If you are considering re-adding any of the removed features, read the original design at
 git tag `pre-simplification` or in the git history before commit `030ef6b`.

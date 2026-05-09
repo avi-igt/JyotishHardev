@@ -102,5 +102,4 @@ The PostToolUse:Edit hook reports `next/head` as an "error" on every `.tsx` file
 
 - `/kundli/interpret` has no rate limiting — monitor Claude API costs
 - Jaimini Chara Dasha not implemented (users always get Vimshottari)
-- DPDPA `/account/delete` endpoint missing (not relevant until user accounts exist)
 - Google Places Autocomplete uses the deprecated `Autocomplete` widget (still functional)
