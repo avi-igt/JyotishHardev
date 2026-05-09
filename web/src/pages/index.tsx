@@ -347,7 +347,7 @@ const HomePage: NextPage = () => {
       </Head>
 
       <main className="page">
-        <PublicNav />
+        <PublicNav onLogoClick={() => { setResult(null); setAiResult(null); setAiError(''); }} />
 
         <div className="container">
           {/* Hero */}

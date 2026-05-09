@@ -8,6 +8,7 @@ import Logo from './Logo';
 
 interface PublicNavProps {
   activePage?: string;
+  onLogoClick?: () => void;
 }
 
 const NAV_LINKS = [
@@ -20,7 +21,7 @@ const NAV_LINKS = [
   { label: 'Predictions',  href: '/predictions',  key: 'predictions' },
 ];
 
-export default function PublicNav({ activePage }: PublicNavProps) {
+export default function PublicNav({ activePage, onLogoClick }: PublicNavProps) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
@@ -37,7 +38,7 @@ export default function PublicNav({ activePage }: PublicNavProps) {
         boxSizing: 'border-box',
       }}>
         {/* Brand */}
-        <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
+        <Link href="/" onClick={onLogoClick} style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
           <Logo size={30} color="#c9a84c" />
           <span style={{
             fontSize: 16, fontWeight: 600, color: '#ffffff',
