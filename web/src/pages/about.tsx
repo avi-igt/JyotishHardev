@@ -34,7 +34,7 @@ const AboutPage: NextPage = () => {
         <meta property="og:url" content="https://jyotishhardev.com/about" />
         <meta property="og:title" content="About Hardev — JyotishHardev" />
         <meta property="og:description" content="My name is Hardev. I'm here to help you listen to what the stars have always been speaking — through the ancient science of Jyotish." />
-        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="About Hardev — JyotishHardev" />
         <meta name="twitter:description" content="My name is Hardev. I'm here to help you listen to what the stars have always been speaking — through the ancient science of Jyotish." />
       </Head>

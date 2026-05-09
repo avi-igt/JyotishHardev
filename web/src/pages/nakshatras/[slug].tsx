@@ -518,7 +518,7 @@ const NakshatraPage: NextPage<PageProps> = ({ nakshatra, prevNakshatra, nextNaks
         <meta property="og:url" content={`https://jyotishhardev.com/nakshatras/${nakshatra.name.toLowerCase().replace(/\s+/g, '-')}`} />
         <meta property="og:title" content={`${nakshatra.name} Nakshatra — Meaning, Traits & Compatibility · JyotishHardev`} />
         <meta property="og:description" content={`${nakshatra.name} nakshatra — ruled by ${nakshatra.ruling_planet}, deity ${nakshatra.deity}. Symbol: ${nakshatra.symbol}. ${nakshatra.general}`} />
-        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={`${nakshatra.name} Nakshatra · JyotishHardev`} />
         <meta name="twitter:description" content={`${nakshatra.name} nakshatra — ruled by ${nakshatra.ruling_planet}, deity ${nakshatra.deity}. Symbol: ${nakshatra.symbol}.`} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />

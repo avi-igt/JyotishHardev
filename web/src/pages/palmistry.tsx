@@ -950,7 +950,7 @@ const PalmistryPage: NextPage = () => {
         <meta property="og:url" content="https://jyotishhardev.com/palmistry" />
         <meta property="og:title" content="Palmistry — Hasta Samudrika Shastra · JyotishHardev" />
         <meta property="og:description" content="Complete Hasta Samudrika Shastra reference — mounts, major and minor lines, hand types, auspicious marks, and Dasha-integrated timing." />
-        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Palmistry — Hasta Samudrika Shastra · JyotishHardev" />
         <meta name="twitter:description" content="Complete Hasta Samudrika Shastra reference — mounts, major and minor lines, hand types, auspicious marks, and Dasha-integrated timing." />
       </Head>

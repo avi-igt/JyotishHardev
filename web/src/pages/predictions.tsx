@@ -88,7 +88,7 @@ const PredictionsPage: NextPage = () => {
         <meta property="og:url" content="https://jyotishhardev.com/predictions" />
         <meta property="og:title" content="Hardev's Macro Predictions · JyotishHardev" />
         <meta property="og:description" content="Jyotish-based predictions about world events, markets, geopolitics, and trends — publicly tracked for accuracy over time. See which predictions came true." />
-        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Hardev's Macro Predictions · JyotishHardev" />
         <meta name="twitter:description" content="Jyotish-based predictions about world events, markets, geopolitics, and trends — publicly tracked for accuracy over time. See which predictions came true." />
         <link rel="preconnect" href="https://fonts.googleapis.com" />

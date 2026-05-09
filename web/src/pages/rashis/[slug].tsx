@@ -238,7 +238,7 @@ const RashiPage: NextPage<PageProps> = ({ rashi, prevRashi, nextRashi }) => {
         <meta property="og:url" content={`https://jyotishhardev.com/rashis/${rashi.name.toLowerCase()}`} />
         <meta property="og:title" content={`${rashi.name} Rashi — Meaning, Traits & Astrology · JyotishHardev`} />
         <meta property="og:description" content={`${rashi.name} (${rashi.symbol}) — ${rashi.element} sign ruled by ${rashi.ruling_planet}. ${rashi.general}`} />
-        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={`${rashi.name} Rashi · JyotishHardev`} />
         <meta name="twitter:description" content={`${rashi.name} (${rashi.symbol}) — ${rashi.element} sign ruled by ${rashi.ruling_planet}. ${rashi.general}`} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />

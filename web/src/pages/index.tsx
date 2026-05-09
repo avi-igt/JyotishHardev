@@ -411,7 +411,7 @@ const HomePage: NextPage = () => {
         <meta property="og:url" content="https://jyotishhardev.com/" />
         <meta property="og:title" content="Free Kundli Generator · JyotishHardev" />
         <meta property="og:description" content="Generate your Vedic birth chart instantly — free, no account needed. Get your Lagna, Rashi, Nakshatra, Dasha, and full Jyotish reading." />
-        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Free Kundli Generator · JyotishHardev" />
         <meta name="twitter:description" content="Generate your Vedic birth chart instantly — free, no account needed. Get your Lagna, Rashi, Nakshatra, Dasha, and full Jyotish reading." />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({

@@ -71,7 +71,7 @@ const DailyPage: NextPage = () => {
         <meta property="og:url" content="https://jyotishhardev.com/daily" />
         <meta property="og:title" content="Daily Cosmic Brief · JyotishHardev" />
         <meta property="og:description" content="Today's Vedic panchang — Tithi, Nakshatra, Yoga, and Moon sign with energy summary. Updated daily at midnight IST." />
-        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Daily Cosmic Brief · JyotishHardev" />
         <meta name="twitter:description" content="Today's Vedic panchang — Tithi, Nakshatra, Yoga, and Moon sign with energy summary. Updated daily at midnight IST." />
         <link rel="preconnect" href="https://fonts.googleapis.com" />

@@ -676,7 +676,7 @@ const TilVicharPage: NextPage = () => {
         <meta property="og:url" content="https://jyotishhardev.com/til-vichar" />
         <meta property="og:title" content="Til Vichar — Mole Reading · JyotishHardev" />
         <meta property="og:description" content="Vedic science of moles (Samudrika Shastra). Decode the meaning of moles by color, shape, and body location according to classical Til Vichar traditions." />
-        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Til Vichar — Mole Reading · JyotishHardev" />
         <meta name="twitter:description" content="Vedic science of moles (Samudrika Shastra). Decode the meaning of moles by color, shape, and body location according to classical Til Vichar traditions." />
         <link rel="preconnect" href="https://fonts.googleapis.com" />

@@ -164,7 +164,7 @@ const TransitsPage: NextPage = () => {
         <meta property="og:url" content="https://jyotishhardev.com/transits" />
         <meta property="og:title" content="Planetary Transit Feed · JyotishHardev" />
         <meta property="og:description" content="Live planetary positions of all 9 Jyotish grahas — computed from Swiss Ephemeris. Sun, Moon, Mars, Mercury, Jupiter, Venus, Saturn, Rahu, Ketu." />
-        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Planetary Transit Feed · JyotishHardev" />
         <meta name="twitter:description" content="Live planetary positions of all 9 Jyotish grahas — computed from Swiss Ephemeris. Sun, Moon, Mars, Mercury, Jupiter, Venus, Saturn, Rahu, Ketu." />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
