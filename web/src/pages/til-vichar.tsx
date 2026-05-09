@@ -57,7 +57,7 @@ const TABS = [
 // ─── Shared styles ───────────────────────────────────────────────────────────
 const sectionTitle: React.CSSProperties = {
   fontFamily: "'Tiro Devanagari Hindi', Georgia, serif",
-  fontSize: 26, fontWeight: 700, color: C.white,
+  fontSize: 26, fontWeight: 700, color: C.text,
   marginBottom: 8, lineHeight: 1.2,
 };
 const sectionSub: React.CSSProperties = {
@@ -141,7 +141,7 @@ function TabColors() {
                 flexShrink: 0,
               }} />
               <div>
-                <div style={{ fontSize: 15, fontWeight: 700, color: C.white }}>{c.color}</div>
+                <div style={{ fontSize: 15, fontWeight: 700, color: C.text }}>{c.color}</div>
                 <div style={{ fontSize: 12, color: C.textDim }}>{c.sanskrit}</div>
               </div>
               <div style={{ marginLeft: 'auto' }}>{qualityBadge(c.quality)}</div>
@@ -175,7 +175,7 @@ function TabShapes() {
                 fontSize: 20, color: C.roseLight, flexShrink: 0,
               }}>{s.icon}</div>
               <div>
-                <div style={{ fontSize: 15, fontWeight: 700, color: C.white }}>{s.shape}</div>
+                <div style={{ fontSize: 15, fontWeight: 700, color: C.text }}>{s.shape}</div>
                 <div style={{ fontSize: 12, color: C.textDim }}>{s.sanskrit}</div>
               </div>
               <div style={{ marginLeft: 'auto' }}>{qualityBadge(s.quality)}</div>
@@ -323,7 +323,7 @@ function TabBodyMap() {
           {selected ? (
             <div style={{ ...card, borderColor: C.rose }}>
               <div style={{ fontSize: 11, fontWeight: 700, color: C.rose, letterSpacing: '1px', textTransform: 'uppercase', marginBottom: 8 }}>{selected.region}</div>
-              <div style={{ fontSize: 17, fontWeight: 700, color: C.white, marginBottom: 4 }}>{selected.label}</div>
+              <div style={{ fontSize: 17, fontWeight: 700, color: C.text, marginBottom: 4 }}>{selected.label}</div>
               <div style={{ fontSize: 12, color: C.textDim, marginBottom: 12 }}>Ruling: <span style={{ color: C.gold }}>{selected.planet}</span></div>
               <div style={{ fontSize: 12, fontWeight: 700, color: C.textDim, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: 6 }}>Domain</div>
               <div style={{ fontSize: 13, color: C.textMid, marginBottom: 16 }}>{selected.domain}</div>
@@ -354,7 +354,7 @@ function TabBodyMap() {
                       fontSize: 12, padding: '5px 8px', borderRadius: 6,
                       cursor: 'pointer', marginBottom: 2,
                       background: z.id === selectedZone ? 'rgba(139,34,82,0.2)' : 'transparent',
-                      color: z.id === selectedZone ? C.white : C.textMid,
+                      color: z.id === selectedZone ? C.rose : C.textMid,
                       transition: 'all 0.1s',
                     }}
                   >{z.label}</div>
@@ -390,7 +390,7 @@ function TabPlanetary() {
               padding: '7px 14px', borderRadius: 20, fontSize: 13, fontWeight: 600,
               border: `1px solid ${selected === p.planet ? C.rose : C.border}`,
               background: selected === p.planet ? 'rgba(139,34,82,0.25)' : 'transparent',
-              color: selected === p.planet ? C.white : C.textMid,
+              color: selected === p.planet ? C.rose : C.textMid,
               cursor: 'pointer', transition: 'all 0.15s',
             }}
           >{p.planet} / {p.sanskrit}</button>
@@ -408,7 +408,7 @@ function TabPlanetary() {
                 flexShrink: 0,
               }} />
               <div>
-                <div style={{ fontSize: 20, fontWeight: 700, color: C.white }}>{planet.planet} — {planet.sanskrit}</div>
+                <div style={{ fontSize: 20, fontWeight: 700, color: C.text }}>{planet.planet} — {planet.sanskrit}</div>
                 <div style={{ fontSize: 13, color: C.textDim }}>{planet.color} moles · {planet.quality}</div>
               </div>
             </div>
@@ -482,7 +482,7 @@ function TabNakshatra() {
                   fontSize: 11, fontWeight: 700, color: C.roseLight, flexShrink: 0,
                 }}>{n.number}</div>
                 <div>
-                  <div style={{ fontSize: 14, fontWeight: 700, color: C.white }}>{n.nakshatra}</div>
+                  <div style={{ fontSize: 14, fontWeight: 700, color: C.text }}>{n.nakshatra}</div>
                   <div style={{ fontSize: 11, color: C.textDim }}>Lord: {n.lord}</div>
                 </div>
               </div>
@@ -503,7 +503,7 @@ function TabNakshatra() {
                   fontSize: 22, flexShrink: 0,
                 }}>{r.sign}</div>
                 <div>
-                  <div style={{ fontSize: 14, fontWeight: 700, color: C.white }}>{r.rashi}</div>
+                  <div style={{ fontSize: 14, fontWeight: 700, color: C.text }}>{r.rashi}</div>
                   <div style={{ fontSize: 11, color: C.textDim }}>Lord: {r.lord} · {r.bodyPart}</div>
                 </div>
               </div>
@@ -540,7 +540,7 @@ function TabCombinations() {
           return (
             <div key={c.name} style={{ ...card, borderLeft: `4px solid ${tc}` }}>
               <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8, marginBottom: 8 }}>
-                <div style={{ fontSize: 15, fontWeight: 700, color: C.white }}>{c.name}</div>
+                <div style={{ fontSize: 15, fontWeight: 700, color: C.text }}>{c.name}</div>
                 <span style={{
                   fontSize: 10, fontWeight: 700, textTransform: 'uppercase',
                   letterSpacing: '0.8px', color: tc,
@@ -578,7 +578,7 @@ function TabRemedies() {
               padding: '6px 14px', borderRadius: 20, fontSize: 13, fontWeight: 600,
               border: `1px solid ${selected === r.planet ? C.rose : C.border}`,
               background: selected === r.planet ? 'rgba(139,34,82,0.25)' : 'transparent',
-              color: selected === r.planet ? C.white : C.textMid,
+              color: selected === r.planet ? C.rose : C.textMid,
               cursor: 'pointer', transition: 'all 0.15s',
             }}
           >{r.planet}</button>
@@ -611,7 +611,7 @@ function TabRemedies() {
             <div style={{ fontSize: 30, flexShrink: 0 }}>📅</div>
             <div>
               <div style={{ fontSize: 12, fontWeight: 700, color: C.textDim, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: 4 }}>Best Day</div>
-              <div style={{ fontSize: 15, fontWeight: 700, color: C.white }}>{remedy.dayOfWeek}</div>
+              <div style={{ fontSize: 15, fontWeight: 700, color: C.text }}>{remedy.dayOfWeek}</div>
             </div>
           </div>
         </div>
@@ -691,7 +691,7 @@ const TilVicharPage: NextPage = () => {
             </p>
             <h1 style={{
               fontFamily: "'Tiro Devanagari Hindi', Georgia, serif",
-              fontSize: 36, fontWeight: 700, color: C.white,
+              fontSize: 36, fontWeight: 700, color: C.text,
               lineHeight: 1.2, marginBottom: 12,
             }}>
               Til Vichar
@@ -719,7 +719,7 @@ const TilVicharPage: NextPage = () => {
                   fontSize: 13, fontWeight: 600,
                   whiteSpace: 'nowrap',
                   background: 'none', border: 'none', cursor: 'pointer',
-                  color: activeTab === tab.key ? C.white : C.textMid,
+                  color: activeTab === tab.key ? C.rose : C.textMid,
                   borderBottom: activeTab === tab.key ? `2px solid ${C.rose}` : '2px solid transparent',
                   transition: 'all 0.15s',
                 }}
@@ -738,7 +738,7 @@ const TilVicharPage: NextPage = () => {
           <div style={{ maxWidth: 540, margin: '0 auto', textAlign: 'center' }}>
             <h2 style={{
               fontFamily: "'Tiro Devanagari Hindi', Georgia, serif",
-              fontSize: 24, fontWeight: 700, color: C.white, marginBottom: 12,
+              fontSize: 24, fontWeight: 700, color: C.text, marginBottom: 12,
             }}>
               See How Your Moles Connect to Your Chart
             </h2>

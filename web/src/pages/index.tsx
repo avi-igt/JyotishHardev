@@ -560,14 +560,6 @@ const HomePage: NextPage = () => {
             </div>
           )}
 
-          {/* Footer features strip — shown only on the form view */}
-          {!result && (
-            <div className="features-strip">
-              <div className="feature-item"><span className="fi-icon">🔮</span><span>5-year life timeline from your chart</span></div>
-              <div className="feature-item"><span className="fi-icon">🧠</span><span>Remembers every conversation</span></div>
-              <div className="feature-item"><span className="fi-icon">📊</span><span>Tracks which predictions came true</span></div>
-            </div>
-          )}
         </div>
       </main>
 
@@ -687,27 +679,6 @@ const HomePage: NextPage = () => {
         }
         .submit-btn:hover:not(:disabled) { opacity: 0.88; }
         .submit-btn:disabled { opacity: 0.45; cursor: not-allowed; }
-
-        /* ── Features strip ── */
-        .features-strip {
-          display: flex;
-          flex-direction: column;
-          gap: 10px;
-          margin-top: 28px;
-          padding: 20px;
-          background: rgba(255,255,255,0.6);
-          border-radius: 12px;
-        }
-
-        .feature-item {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          font-size: 13px;
-          color: #6b6b8a;
-        }
-
-        .fi-icon { font-size: 16px; }
 
         /* ── Results ── */
         .results { }
