@@ -27,7 +27,7 @@
 - [ ] Mobile nav audit — tab bars on palmistry and til-vichar have many tabs; check on small screens
 - [x] Favicon — SVG wheel (primary) + PNG Om symbol fallbacks (16, 32, 192, 512px) + apple-touch-icon
 - [x] OG image — 1200×630 branded indigo/gold card served at /og-image.png; summary_large_image on all pages
-- [ ] Google Search Console — submit sitemap.xml to trigger indexing (TXT verification via Namecheap @)
+- [x] Google Search Console — verified via Namecheap TXT record (@), sitemap.xml submitted
 - [ ] Vercel Deployment Protection — ensure set to "Only Preview Deployments" so Facebook/Google scrapers are not blocked (403)
 
 ## Content maintenance
