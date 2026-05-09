@@ -31,13 +31,13 @@ const AboutPage: NextPage = () => {
 
       <PublicNav activePage="about" />
 
-      <main style={{ background: '#0e1235', minHeight: '100vh', color: '#e8e0d0' }}>
+      <main style={{ background: '#f5f0e8', minHeight: '100vh', color: '#1a1a2e' }}>
         <div style={{ maxWidth: 680, margin: '0 auto', padding: '64px 24px 88px' }}>
 
           {/* Hero */}
           <p style={{
             fontSize: 13, fontWeight: 600, letterSpacing: '1.6px',
-            textTransform: 'uppercase', color: 'rgba(201,168,76,0.7)',
+            textTransform: 'uppercase', color: '#6b6b8a',
             marginBottom: 20,
           }}>
             About
@@ -45,24 +45,24 @@ const AboutPage: NextPage = () => {
           <h1 style={{
             fontFamily: "'Tiro Devanagari Hindi', Georgia, serif",
             fontSize: 38, fontWeight: 700, lineHeight: 1.2,
-            color: '#ffffff', marginBottom: 32,
+            color: '#1b1f4a', marginBottom: 32,
           }}>
             The stars have always been speaking.<br />
             I'm here to help you listen.
           </h1>
-          <p style={{ fontSize: 17, color: 'rgba(232,224,208,0.85)', lineHeight: 1.8, marginBottom: 48 }}>
+          <p style={{ fontSize: 17, color: '#3a3a5c', lineHeight: 1.8, marginBottom: 48 }}>
             My name is Hardev, I am your virtual AI astrologer. For as long as I can remember, I've been drawn to the ancient
             wisdom of Jyotish — the sacred science of light that has guided seekers for thousands
             of years.
           </p>
-          <p style={{ fontSize: 17, color: 'rgba(232,224,208,0.85)', lineHeight: 1.8, marginBottom: 64 }}>
+          <p style={{ fontSize: 17, color: '#3a3a5c', lineHeight: 1.8, marginBottom: 64 }}>
             Jyotish isn't about predicting a fixed fate. It's about understanding the rhythm of
             your life — the seasons of your soul. Your birth chart is not a verdict. It's a map.
             And like any map, it only becomes useful when someone helps you read it.
           </p>
 
           {/* Divider */}
-          <div style={{ width: 48, height: 2, background: '#c9a84c', marginBottom: 64, opacity: 0.5 }} />
+          <div style={{ width: 48, height: 2, background: '#c9a84c', marginBottom: 64, opacity: 0.6 }} />
 
           {/* Body sections */}
           {SECTIONS.map(section => (
@@ -70,13 +70,13 @@ const AboutPage: NextPage = () => {
               <h2 style={{
                 fontFamily: "'Tiro Devanagari Hindi', Georgia, serif",
                 fontSize: 22, fontWeight: 700,
-                color: '#c9a84c', marginBottom: 20,
+                color: '#1b1f4a', marginBottom: 20,
               }}>
                 {section.heading}
               </h2>
               {section.body.split('\n\n').map((para, i) => (
                 <p key={i} style={{
-                  fontSize: 16, color: 'rgba(232,224,208,0.8)',
+                  fontSize: 16, color: '#3a3a5c',
                   lineHeight: 1.85, marginBottom: 18,
                 }}>
                   {para}
@@ -86,27 +86,27 @@ const AboutPage: NextPage = () => {
           ))}
 
           {/* Divider */}
-          <div style={{ width: 48, height: 2, background: '#c9a84c', marginBottom: 56, opacity: 0.5 }} />
+          <div style={{ width: 48, height: 2, background: '#c9a84c', marginBottom: 56, opacity: 0.6 }} />
 
           {/* Closing section */}
           <div style={{ marginBottom: 64 }}>
             <h2 style={{
               fontFamily: "'Tiro Devanagari Hindi', Georgia, serif",
               fontSize: 22, fontWeight: 700,
-              color: '#c9a84c', marginBottom: 20,
+              color: '#1b1f4a', marginBottom: 20,
             }}>
               Let's Walk This Path Together
             </h2>
-            <p style={{ fontSize: 16, color: 'rgba(232,224,208,0.8)', lineHeight: 1.85, marginBottom: 18 }}>
+            <p style={{ fontSize: 16, color: '#3a3a5c', lineHeight: 1.85, marginBottom: 18 }}>
               Whether you are new to Jyotish or have been exploring it for years, I welcome you
               here. There is no perfect moment to begin — only this one.
             </p>
-            <p style={{ fontSize: 16, color: 'rgba(232,224,208,0.8)', lineHeight: 1.85, marginBottom: 32 }}>
+            <p style={{ fontSize: 16, color: '#3a3a5c', lineHeight: 1.85, marginBottom: 32 }}>
               I'd be honoured to read the stars with you.
             </p>
             <p style={{
               fontFamily: "'Tiro Devanagari Hindi', Georgia, serif",
-              fontSize: 18, color: '#c9a84c', fontStyle: 'italic',
+              fontSize: 18, color: '#1b1f4a', fontStyle: 'italic',
             }}>
               — Hardev
             </p>

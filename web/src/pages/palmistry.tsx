@@ -10,17 +10,17 @@ import PublicNav from '@/components/PublicNav';
 
 // ─── Colour tokens ────────────────────────────────────────────────────────────
 const C = {
-  bg:       '#0a0d2e',
-  surface:  '#12164a',
-  card:     '#181d56',
-  border:   'rgba(201,168,76,0.18)',
+  bg:       '#f5f0e8',
+  surface:  '#ffffff',
+  card:     '#f5f0e8',
+  border:   'rgba(27,31,74,0.12)',
   gold:     '#c9a84c',
-  goldDim:  'rgba(201,168,76,0.55)',
+  goldDim:  'rgba(201,168,76,0.7)',
   crimson:  '#9b2335',
-  crimsonD: 'rgba(155,35,53,0.22)',
-  text:     '#e8e0d0',
-  muted:    'rgba(232,224,208,0.55)',
-  faint:    'rgba(232,224,208,0.3)',
+  crimsonD: 'rgba(155,35,53,0.1)',
+  text:     '#1a1a2e',
+  muted:    '#6b6b8a',
+  faint:    'rgba(27,31,74,0.35)',
 };
 
 // ─── Tab definitions ──────────────────────────────────────────────────────────
