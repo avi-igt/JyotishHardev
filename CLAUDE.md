@@ -104,7 +104,11 @@ After a Kundli is generated, the results show:
 - Lagna, Moon sign, Nakshatra, current Dasha
 - Static Vedic profile (personality traits, career, finances, family, health) from `LAGNA_DATA`
 - Lucky numbers, colour, and day from `NAKSHATRA_LUCKY`
-- Three action buttons: **← New Kundli**, **Share ↗** (copies URL with encoded birth params), **Email ↗** (mailto with chart summary)
+- **← New Kundli** button, then a social share row: WhatsApp, X, Facebook, Telegram, Email, Copy link
+
+The homepage hero (before any chart is generated) also has a share row — WhatsApp, X, Facebook, Telegram — that shares `jyotishhardev.com` itself with a short description.
+
+Social sharing uses `handleShareTo(platform)` for Kundli results and inline handlers for the hero row. Both use CSS custom property `--brand` on `.social-btn` to set the hover colour per platform.
 
 The Share URL encodes all birth details as query params (`?share=1&...`). On page load, a `useEffect` detects `share=1`, pre-fills the form, and auto-submits via `submitKundliWith()` — bypassing React state timing by accepting explicit values rather than reading from state.
 

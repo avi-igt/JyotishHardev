@@ -16,7 +16,8 @@
 - [x] Color consistency — all pages use cream (#f5f0e8) background, indigo text palette
 - [x] Rate limiting on `/kundli/interpret` — 10 requests/hour per IP via slowapi
 - [x] Share Kundli — "Share ↗" button copies URL with encoded birth details; auto-loads on visit
-- [x] Email Kundli — "Email ↗" button opens mailto with chart summary and share link pre-filled
+- [x] Social share buttons on results page — WhatsApp, X, Facebook, Telegram, Email, Copy link
+- [x] Social share buttons on homepage hero — WhatsApp, X, Facebook, Telegram (shares site URL)
 - [x] SEO — OG tags, Twitter cards, canonical URLs, sitemap.xml, robots.txt, JSON-LD on all pages
 
 ## Near-term improvements

@@ -17,7 +17,7 @@ No login, no subscription, nothing to install.
 
 | Route | What it does |
 |-------|-------------|
-| `/` | Free Kundli generator — enter birth details, get chart + static Jyotish reading. Share ↗ and Email ↗ buttons on results. |
+| `/` | Free Kundli generator — enter birth details, get chart + static Jyotish reading. Hero has site share buttons (WhatsApp, X, Facebook, Telegram). Results have full share row (+ Email, Copy link). |
 | `/daily` | Today's Panchang — Tithi, Nakshatra, Yoga, Moon sign with AI energy summary |
 | `/transits` | Current sidereal positions of all 9 grahas (Lahiri ayanamsha) |
 | `/predictions` | Hardev's world predictions with accuracy tracking |
