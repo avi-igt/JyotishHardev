@@ -317,7 +317,9 @@ Tone: warm, learned, specific. Like a trusted family astrologer. Never use death
             messages=[{"role": "user", "content": prompt}],
         )
         raw = response.content[0].text
-    except Exception:
+    except Exception as exc:
+        import logging
+        logging.getLogger(__name__).error("Anthropic API error: %s", exc, exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail="Could not reach the astrologer right now. Please try again.",
