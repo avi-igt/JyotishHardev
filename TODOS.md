@@ -3,7 +3,7 @@
 ## Live and working
 
 - [x] Free Kundli generator — anonymous, no account, instant chart
-- [x] AI reading (Hardev interpretation) — free for all, no auth gate
+- [x] ~~AI reading~~ — removed from UI; `/kundli/interpret` backend endpoint kept but not surfaced
 - [x] Daily Cosmic Brief (Panchang) — Tithi, Nakshatra, Yoga, Moon sign + AI energy summary
 - [x] Transits — current sidereal positions of all 9 grahas
 - [x] Library — all 27 Nakshatras and 12 Rashis with descriptions
@@ -16,13 +16,16 @@
 - [x] Color consistency — all pages use cream (#f5f0e8) background, indigo text palette
 - [x] Rate limiting on `/kundli/interpret` — 10 requests/hour per IP via slowapi
 - [x] Share Kundli — "Share ↗" button copies URL with encoded birth details; auto-loads on visit
+- [x] Email Kundli — "Email ↗" button opens mailto with chart summary and share link pre-filled
+- [x] SEO — OG tags, Twitter cards, canonical URLs, sitemap.xml, robots.txt, JSON-LD on all pages
 
 ## Near-term improvements
 
 - [ ] Google Places Autocomplete uses deprecated widget — monitor for breakage, migrate when needed
 - [ ] 404 page — unknown routes show default Next.js blank; add a branded page
 - [ ] Mobile nav audit — tab bars on palmistry and til-vichar have many tabs; check on small screens
-- [ ] Favicon and OG image — verify social sharing previews render correctly
+- [ ] Favicon and OG image — social previews show text only; a static OG image would improve click-through
+- [ ] Google Search Console — submit sitemap.xml to trigger indexing
 
 ## Content maintenance
 

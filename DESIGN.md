@@ -1,7 +1,7 @@
 # JyotishHardev — Design Reference
 
 > Free, anonymous Vedic astrology website. No accounts, no payments, no database.
-> Updated: May 2026 (predictions populated, colour consistency across all pages).
+> Updated: May 2026 (SEO, Share/Email Kundli, AI reading removed from UI).
 
 ---
 
@@ -17,7 +17,7 @@ No login, no subscription, nothing to install.
 
 | Route | What it does |
 |-------|-------------|
-| `/` | Free Kundli generator — enter birth details, get chart + static reading + optional AI reading |
+| `/` | Free Kundli generator — enter birth details, get chart + static Jyotish reading. Share ↗ and Email ↗ buttons on results. |
 | `/daily` | Today's Panchang — Tithi, Nakshatra, Yoga, Moon sign with AI energy summary |
 | `/transits` | Current sidereal positions of all 9 grahas (Lahiri ayanamsha) |
 | `/predictions` | Hardev's world predictions with accuracy tracking |
@@ -176,7 +176,7 @@ Touch target:  Minimum 44×44px
 
 ### Hardev persona
 
-The AI reading is attributed to **Hardev** — a learned astrologer, not a chatbot.
+The `/kundli/interpret` backend endpoint produces readings attributed to **Hardev** — a learned astrologer, not a chatbot. This endpoint is rate-limited (10 req/hour per IP) and uses `claude-sonnet-4-6`. It is not currently surfaced in the UI.
 - Never: "As an AI language model..."
 - Always: warm, specific, first-person ("Your Moon in Vrishchika suggests...")
 - Response cards styled as correspondence, not chat bubbles
