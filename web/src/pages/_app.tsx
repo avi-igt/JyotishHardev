@@ -60,6 +60,7 @@ export default function App({ Component, pageProps }: AppProps) {
             font-size: 14px;
             font-weight: 600;
             color: #1b1f4a;
+            display: inline;
           }
           .pac-matched { color: #c9a84c; }
           .pac-icon { display: none; }
