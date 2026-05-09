@@ -410,7 +410,7 @@ const HomePage: NextPage = () => {
       </Head>
 
       <main className="page">
-        <PublicNav onLogoClick={() => { setResult(null); setAiResult(null); setAiError(''); }} />
+        <PublicNav onLogoClick={() => { setResult(null); }} />
 
         <div className="container">
           {/* Hero */}
@@ -508,7 +508,7 @@ const HomePage: NextPage = () => {
             <div className="results">
               <div className="results-header">
                 <div className="results-actions">
-                  <button className="new-kundli-btn" onClick={() => { setResult(null); setAiResult(null); setAiError(''); }}>
+                  <button className="new-kundli-btn" onClick={() => { setResult(null); }}>
                     ← New Kundli
                   </button>
                   <button className="share-btn" onClick={handleShare}>
