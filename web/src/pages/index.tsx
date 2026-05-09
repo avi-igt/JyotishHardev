@@ -436,6 +436,9 @@ const HomePage: NextPage = () => {
           ) : (
             <div className="results">
               <div className="results-header">
+                <button className="new-kundli-btn" onClick={() => { setResult(null); setAiResult(null); setAiError(''); }}>
+                  ← New Kundli
+                </button>
                 <h2 className="results-name">{result.name}&apos;s Kundli</h2>
                 {result.tob_unknown && (
                   <p className="tob-notice">Birth time unknown — noon chart used. Lagna may be inaccurate.</p>
@@ -713,6 +716,14 @@ const HomePage: NextPage = () => {
         .results { }
 
         .results-header { text-align: center; margin-bottom: 24px; }
+        .new-kundli-btn {
+          display: inline-flex; align-items: center; gap: 4px;
+          background: none; border: 1px solid rgba(27,31,74,0.2);
+          border-radius: 20px; padding: 6px 14px; font-size: 13px;
+          color: #6b6b8a; cursor: pointer; margin-bottom: 16px;
+          transition: border-color 150ms, color 150ms;
+        }
+        .new-kundli-btn:hover { border-color: #1b1f4a; color: #1b1f4a; }
 
         .results-name {
           font-family: 'Tiro Devanagari Hindi', Georgia, serif;
