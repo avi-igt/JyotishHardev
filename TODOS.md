@@ -1,76 +1,37 @@
 # TODOS
 
-## Phase 1 (weeks 1-6)
+## Live and working
 
-- [x] Onboarding API: birth details form, Google Places POB autocomplete, chart generation
-- [x] Kundali chart generation worker (async, 5-year chunks, checkpoint on restart)
-- [x] Milestone Oracle: generate prediction timeline, shareable share page (Next.js /share/:id)
-- [x] Persistent chat API with rate limiting (5/day trial, 25/day paid) — mobile app only
-- [x] Response classifier (rewrites death language) — required on ALL LLM responses
-- [ ] Session memory: pgvector cosine similarity query (currently returns recency, not semantic similarity)
-- [x] Event logging API + AccuracyCorpus atomic increment
-- [ ] Daily transit push notification (Expo Notifications) — endpoint exists, cron not wired
-- [x] Subscription: Stripe, idempotent webhook handler
-- [x] Trial lifecycle: trial_expires_at, 402 on gated endpoints — mobile app only (web is now free)
-- [ ] DPDPA consent at onboarding + /account/delete endpoint — required for India launch
-- [x] Supabase auth integration
-
-## Website (free, no login)
-
-- [x] Free Kundli Generator — anonymous, no account needed
+- [x] Free Kundli generator — anonymous, no account, instant chart
 - [x] AI reading (Hardev interpretation) — free for all, no auth gate
-- [x] Remove Sign in / Get started from nav
-- [x] Remove auth redirect from _app.tsx
-- [x] Fix CORS: add jyotishhardev.com to ALLOWED_ORIGINS on Railway
-- [x] Fix transits page: `planets` key mismatch corrected
-- [x] Fix predictions 500: alembic upgrade head now runs on every Railway deploy
+- [x] Daily Cosmic Brief (Panchang) — Tithi, Nakshatra, Yoga, Moon sign + AI energy summary
+- [x] Transits — current sidereal positions of all 9 grahas
+- [x] Library — all 27 Nakshatras and 12 Rashis with descriptions
+- [x] Palmistry guide — static educational content
+- [x] Til Vichar guide — static educational content
+- [x] Hardev's world predictions — hardcoded, editable in public.py
+- [x] CORS open to all origins — no env var config needed
+- [x] No database, no auth, no billing — fully stateless backend
 
-## Mobile (React Native / Expo) — remaining gaps
+## Near-term improvements
 
-- [ ] POB autocomplete: Google Places Places API hook not wired in POBScreen.tsx
-- [ ] Planetary animation on Kundali generation screen (9 planets, sequential placement)
-- [ ] Memory tag chips inside chat AI response bubbles
-- [ ] Kundali chart: tap-to-fullscreen modal + pinch-to-zoom
-- [ ] Session embedding: call Anthropic embeddings API to populate pgvector column
-- [ ] Push notifications: wire daily transit cron to Expo Notifications
-- [ ] Trial expiry soft banner (day 25 warning)
+- [ ] Rate limiting on `/kundli/interpret` — currently unmetered, monitor Claude costs
+- [ ] POB autocomplete: Google Places hook not wired in homepage (lat/lon fallback works)
+- [ ] Add real world predictions to `_WORLD_PREDICTIONS` in `backend/app/api/public.py`
 
-## Phase 1.5 (weeks 7-10) — gate: 500+ confirmed Events in AccuracyCorpus
+## Design polish
 
-- [ ] Accuracy dashboard (show confirmed_count per domain + dasha period)
-- [ ] Disconfirm flow (user marks prediction as wrong)
-- [ ] Hindi v1.1
+- [ ] Planetary animation on homepage while Kundli computes (9 planets, sequential)
+- [ ] All touch targets ≥ 44×44px audit before wider promotion
+- [ ] `prefers-reduced-motion` fallback for any animation
+- [ ] Screen reader labels for Kundali chart houses
 
-## Phase 2 (months 3-6) — gate: Phase 1 success criteria met
+## Deferred / not in scope
 
-- [ ] Astrologer CRM (B2B track, ₹1999/month)
-- [ ] Family Kundali Graph (up to 5 members, OTP consent, DPDPA)
-- [ ] Full Hindi localization
-- [ ] Jaimini Chara Dasha computation (currently only Vimshottari is implemented)
-
-## Design (from /plan-design-review)
-
-- [x] Integrate Tiro Devanagari font (Google Fonts) for headings — web + mobile
-- [ ] Implement planetary animation on Kundali generation screen (9 planets, sequential)
-- [ ] Implement "Hardev" astrologer persona — avatar (⊕), letter-style response cards
-- [ ] Memory tag as stamped seal inside response card (not external chip)
-- [x] Gold (#C9A84C) never used for text — decorative/fill only (contrast too low)
-- [ ] All touch targets ≥ 44×44px — audit before first TestFlight build
-- [x] Share page: SSR no-JS fallback confirmed working
-- [ ] Kundali chart: horizontal scroll on small screens + tap-to-fullscreen modal
-- [ ] `prefers-reduced-motion` fallback for planetary animation (replace with progress bar)
-- [ ] Screen reader labels for Kundali chart houses and milestone timeline rows
-
-## Deferred (not in current scope)
-
-- API licensing / platform play
-- Gemstone / physical product recommendations
-- Native chart interactions (zoom, tap-to-explain house)
-
-## Before first public launch
-
-- [x] Set up Stripe account + create subscription product (mobile app)
-- [ ] Validate pyswisseph against known Kundali (regression test with verified birth chart)
-- [ ] Legal review of milestone/death prediction framing
-- [ ] DPDPA /account/delete endpoint (required for India launch)
-- [ ] Rate limiting on /kundli/interpret (currently open — monitor Claude costs)
+- Mobile app (React Native / Expo) — exists in repo but not actively maintained
+- User accounts, chat, session memory
+- Subscription billing
+- Astrologer CRM (B2B)
+- Family Kundali graph
+- Jaimini Chara Dasha
+- DPDPA `/account/delete` (only needed when user accounts exist)

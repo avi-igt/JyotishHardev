@@ -188,13 +188,12 @@ const PredictionsPage: NextPage = () => {
 
           {/* CTA */}
           <div className="cta-card">
-            <h2 className="cta-heading">Get your personal predictions</h2>
+            <h2 className="cta-heading">Read the stars for yourself</h2>
             <p className="cta-body">
-              Hardev generates a 20-year personalised prediction timeline from your Vedic birth chart —
-              tracking which events actually occur, and building an accuracy score over time.
+              Generate your free Kundli and get an AI-powered reading based on your
+              personal Lagna, Rashi, Nakshatra, and current Dasha period.
             </p>
-            <Link href="/signup" className="cta-btn">Start your free trial →</Link>
-            <p className="cta-sub">30-day trial · No credit card needed</p>
+            <Link href="/" className="cta-btn">Generate your free Kundli →</Link>
           </div>
         </div>
       </div>
@@ -459,11 +458,6 @@ const PredictionsPage: NextPage = () => {
 
         .cta-btn:hover { opacity: 0.88; }
 
-        .cta-sub {
-          font-size: 12px;
-          color: rgba(255,255,255,0.4);
-          margin: 12px 0 0;
-        }
 
         @media (max-width: 480px) {
           .hero-title { font-size: 26px; }

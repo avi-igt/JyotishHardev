@@ -1,7 +1,7 @@
-"""Public endpoints — no auth required, no data saved.
+"""Public endpoints — no auth, no database, no user data stored.
 
-Used by the /kundli free chart generator page.
-The /kundli/interpret endpoint requires auth (trial or paid users only).
+All endpoints are free and anonymous. Data is computed on the fly using
+pyswisseph for ephemeris math and Claude for AI interpretations.
 """
 from datetime import date, time as dt_time, datetime, timezone, timedelta
 from typing import Optional
@@ -350,3 +350,52 @@ Tone: warm, learned, specific. Like a trusted family astrologer. Never use death
         sections["personality"] = classified
 
     return InterpretResponse(**sections)
+
+
+# ─── World Predictions (static) ───────────────────────────────────────────────
+
+class WorldPredictionItem(BaseModel):
+    id: str
+    topic: str
+    text: str
+    posted_at: str
+    target_date: Optional[str] = None
+    status: str  # "pending" | "confirmed" | "missed"
+
+
+class WorldPredictionsResponse(BaseModel):
+    predictions: list[WorldPredictionItem]
+    accuracy_pct: Optional[float] = None
+    total_confirmed: int = 0
+    total_evaluated: int = 0
+
+
+# Edit this list directly to add or update Hardev's world predictions.
+_WORLD_PREDICTIONS: list[dict] = [
+    # Example:
+    # {
+    #     "id": "1",
+    #     "topic": "India",
+    #     "text": "...",
+    #     "posted_at": "2025-01-01",
+    #     "target_date": "2025-12-31",
+    #     "status": "pending",
+    # },
+]
+
+
+@router.get("/public/predictions", response_model=WorldPredictionsResponse)
+def list_world_predictions() -> WorldPredictionsResponse:
+    """Return Hardev's macro predictions. No auth required. Data is hardcoded in this file."""
+    items = [WorldPredictionItem(**p) for p in _WORLD_PREDICTIONS]
+    non_pending = [p for p in items if p.status != "pending"]
+    confirmed = [p for p in non_pending if p.status == "confirmed"]
+    accuracy_pct = (
+        round(len(confirmed) / len(non_pending) * 100, 1) if non_pending else None
+    )
+    return WorldPredictionsResponse(
+        predictions=items,
+        accuracy_pct=accuracy_pct,
+        total_confirmed=len(confirmed),
+        total_evaluated=len(non_pending),
+    )

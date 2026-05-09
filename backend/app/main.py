@@ -1,8 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import onboarding, predictions, chat, events, subscription, public, transits, world_predictions
-from app.core.config import settings
+from app.api import public, transits
 
 app = FastAPI(title="JyotishHardev API", version="0.1.0")
 
@@ -20,12 +19,5 @@ def health():
     return {"status": "ok"}
 
 
-# Routes
-app.include_router(onboarding.router, prefix="/api/v1")
-app.include_router(predictions.router, prefix="/api/v1")
-app.include_router(chat.router, prefix="/api/v1")
-app.include_router(events.router, prefix="/api/v1")
-app.include_router(subscription.router, prefix="/api/v1")
 app.include_router(public.router, prefix="/api/v1")
 app.include_router(transits.router, prefix="/api/v1")
-app.include_router(world_predictions.router, prefix="/api/v1")

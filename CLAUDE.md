@@ -4,32 +4,25 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this project is
 
-JyotishHardev is a persistent Vedic astrology app. The key differentiator is **memory** — unlike every other astrology app, JyotishHardev remembers every session, tracks which predictions came true, and builds an accuracy score over time. See DESIGN.md for the full product design.
+JyotishHardev is a free, no-login Vedic astrology website. Visitors get an instant Kundli chart, a static reading, and an optional AI interpretation — all anonymously, with no accounts and no payments.
 
 ## Project structure
 
 ```
 JyotishHardev/
-├── backend/          # FastAPI (Python) — ephemeris + AI + data
+├── backend/          # FastAPI (Python) — stateless, no database
 │   ├── app/
-│   │   ├── api/      # Route handlers
-│   │   ├── core/     # Config, auth, db session
-│   │   ├── models/   # SQLAlchemy models
-│   │   ├── services/ # Business logic (chart, llm, memory, billing)
-│   │   └── workers/  # Background jobs (prediction generation, session embedding)
+│   │   ├── api/      # public.py (kundli, panchang, AI reading, predictions)
+│   │   │             # transits.py (current planetary positions)
+│   │   ├── core/     # config.py (ANTHROPIC_API_KEY only)
+│   │   └── services/ # chart.py (pyswisseph math), classifier.py (safe framing)
 │   └── tests/
-├── mobile/           # React Native (Expo) — main app
+├── mobile/           # React Native (Expo) — not actively maintained
+├── web/              # Next.js 14 Pages Router — main website
 │   └── src/
-│       ├── screens/
-│       ├── components/
-│       ├── hooks/
-│       └── services/ # API client
-├── web/              # Next.js — share page only (/share/:id)
-│   └── src/
-│       ├── pages/
+│       ├── pages/    # All public, no auth
 │       └── components/
-├── shared/           # Types shared between mobile + web
-└── infra/            # Docker, Railway/Render config
+└── infra/            # Docker, Railway config
 ```
 
 ## Commands
@@ -40,11 +33,7 @@ cd backend && pip install -r requirements.txt
 cd backend && uvicorn app.main:app --reload      # dev server
 cd backend && pytest                              # run tests
 
-# Mobile
-cd mobile && npm install
-cd mobile && npx expo start                       # dev server
-
-# Web (share page)
+# Web
 cd web && npm install
 cd web && npm run dev
 ```
@@ -52,62 +41,66 @@ cd web && npm run dev
 ## Key architectural rules
 
 1. **Ephemeris is math, not LLM.** Planetary positions are computed by `pyswisseph`. The LLM only interprets pre-computed data — it never generates chart positions.
-2. **Memory cold start.** Sessions 1-3: inject all session summaries directly into prompt. Session 4+: pgvector cosine similarity, top-5 relevant sessions. (Note: pgvector query not yet implemented — currently returns recency.)
-3. **Response classifier is mandatory.** Every LLM response must pass through the classifier before reaching the user. It rewrites death framing to "health watch period" language. If the classifier errors, show a fallback — never pass raw output.
-4. **Trial is server-enforced on mobile only.** `trial_expires_at` on Profile. API returns 402 for gated chat/prediction endpoints after expiry. The website (`jyotishhardev.com`) is fully free — no auth, no trial, no paywall. `/kundli/interpret` is public.
-5. **Prediction generation is async.** Generated in 5-year chunks at onboarding, checkpointed in `generation_status` on Kundali. Worker resumes from checkpoint on restart.
-6. **AccuracyCorpus is atomic.** Confirmed event increments use atomic DB operations — no double-counting on concurrent confirms.
-7. **Payment routing.** Stripe only. Webhook handlers must be idempotent (same event fired twice = no state change).
+2. **No database.** The backend is fully stateless. Nothing is persisted. Every request is computed fresh.
+3. **No auth.** There are no user accounts, no sessions, no tokens. All endpoints are public.
+4. **Response classifier is mandatory.** Every LLM response must pass through `services/classifier.py` before reaching the user. It rewrites death framing to "health watch period" language. If the classifier errors, show a fallback — never pass raw output.
+5. **World predictions are hardcoded.** Edit `_WORLD_PREDICTIONS` in `backend/app/api/public.py` directly to add or update Hardev's predictions. No admin UI or database needed.
 
-## Data model highlights
+## Backend API endpoints
 
-- `Profile.tradition` — `parashara` or `jaimini`. Set once at onboarding, never changeable.
-- `SessionMemory` — max 20 per user. Session 21 prunes session 1 and updates vector index.
-- `AccuracyCorpus` — anonymized aggregate only. Never stores individual user data.
-- `schema_version` on Profile and Kundali — old records need migration or graceful error on read.
+All endpoints are under `/api/v1/` and require no auth:
 
-## Environment variables needed
+| Method | Path | Purpose |
+|--------|------|---------|
+| `GET` | `/health` | Health check |
+| `POST` | `/public/kundli` | Compute Kundli chart from birth details |
+| `POST` | `/kundli/interpret` | AI reading via Claude (passes through classifier) |
+| `GET` | `/public/panchang/today` | Today's Tithi, Nakshatra, Yoga, Moon sign |
+| `GET` | `/public/transits/current` | Current sidereal positions of all 9 grahas |
+| `GET` | `/public/predictions` | Hardev's world predictions (hardcoded in public.py) |
+
+## Web pages
+
+| Page | Route |
+|------|-------|
+| Homepage (Kundli generator) | `/` |
+| About | `/about` |
+| Daily Brief (Panchang) | `/daily` |
+| Transits | `/transits` |
+| Library (Nakshatras + Rashis) | `/library` |
+| Palmistry guide | `/palmistry` |
+| Til Vichar guide | `/til-vichar` |
+| Hardev's predictions | `/predictions` |
+| Nakshatra detail | `/nakshatras/[slug]` |
+| Rashi detail | `/rashis/[slug]` |
+
+## Environment variables
 
 ```
-DATABASE_URL=postgresql://...
+# Backend (Railway)
 ANTHROPIC_API_KEY=...
-SUPABASE_URL=...
-SUPABASE_ANON_KEY=...
-STRIPE_SECRET_KEY=...
-STRIPE_WEBHOOK_SECRET=...
-GOOGLE_PLACES_API_KEY=...
-SECRET_KEY=...
+
+# Web (Vercel)
+NEXT_PUBLIC_API_URL=https://jyotishhardev-production.up.railway.app
+NEXT_PUBLIC_GOOGLE_PLACES_API_KEY=...   # for POB autocomplete on homepage
 ```
 
 ## Deployment
 
-- **Backend**: Railway (`jyotishhardev-production.up.railway.app`) — FastAPI + pyswisseph
-  - `railway.toml` runs `alembic upgrade head` before every deploy
-  - Set `ALLOWED_ORIGINS=https://www.jyotishhardev.com,http://localhost:3000` in Railway env vars
+- **Backend**: Railway (`jyotishhardev-production.up.railway.app`) — FastAPI + pyswisseph. No migrations, no DB.
 - **Web**: Vercel (`jyotishhardev.com`) — Next.js 14 Pages Router. Auto-deploys from `main`.
-- **Mobile**: Expo (not yet published to App Store / Play Store)
 
-## Critical path to test before shipping
+## CORS
 
-See `backend/tests/` — the test plan in DESIGN.md defines the critical paths:
-1. Homepage Kundli form → chart + AI reading displayed inline, no login required
-2. Birth details → chart computed → Predictions generated → dashboard loads (mobile)
-3. Chat message → classifier → response with memory tags → session summary embedded
-4. Event confirmed → AccuracyCorpus.confirmed_count increments
-5. Trial expires (mobile) → 402 on /api/v1/chat → Kundali + /share/:id still return 200
-6. Payment webhook → subscription activated → paid rate limit applies
+The backend uses `allow_origins=["*"]` with `allow_credentials=False`. Since there are no cookies or auth tokens, this is safe and means no CORS configuration is needed on Railway.
 
-## Payment: Stripe only
+## Hook validator note
 
-All subscriptions go through Stripe. No Razorpay. To get your keys:
-- `STRIPE_SECRET_KEY`: dashboard.stripe.com → Developers → API keys → Secret key
-- `STRIPE_WEBHOOK_SECRET`: dashboard.stripe.com → Developers → Webhooks → Add endpoint → `whsec_...`
-  - Endpoint URL: `https://yourapp.com/api/v1/subscription/webhook/stripe`
-  - Events to listen for: `invoice.payment_succeeded`, `customer.subscription.deleted`
+The PostToolUse:Edit hook reports `next/head` as an "error" on every `.tsx` file. This is a **false positive** — the project uses Next.js Pages Router, where `next/head` is correct. The `"use client"` suggestions are also wrong for Pages Router. Ignore all of these.
 
 ## Known open issues
 
-- `pgvector` cosine similarity not implemented — `services/memory.py` returns recency for session 4+
-- `/kundli/interpret` is now public with no rate limiting — monitor Claude costs; add IP-based limiting if needed
-- Jaimini Chara Dasha not implemented — users who select Jaimini tradition get Vimshottari dasha
-- DPDPA `/account/delete` endpoint missing — required before India launch
+- `/kundli/interpret` has no rate limiting — monitor Claude API costs
+- Jaimini Chara Dasha not implemented (users always get Vimshottari)
+- DPDPA `/account/delete` endpoint missing (not relevant until user accounts exist)
+- Google Places Autocomplete uses the deprecated `Autocomplete` widget (still functional)

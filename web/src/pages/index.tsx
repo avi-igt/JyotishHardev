@@ -1,8 +1,6 @@
 /**
- * Homepage — Kundli generator embedded directly.
- * Guests get instant gratification (free chart + static reading).
- * Sign-up prompt for AI reading and full features.
- * Logged-in users are redirected to /dashboard.
+ * Homepage — free Kundli generator, no login required.
+ * Computes chart instantly, shows static reading, and offers an AI reading via Claude.
  */
 import type { NextPage } from 'next';
 import Head from 'next/head';

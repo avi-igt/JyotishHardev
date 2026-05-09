@@ -235,11 +235,10 @@ const TransitsPage: NextPage = () => {
           <div className="cta-card">
             <h2 className="cta-heading">How do these transits affect YOUR chart?</h2>
             <p className="cta-body">
-              Generic transit positions are just the beginning. Hardev analyses how each planet
-              interacts with your personal Lagna, natal planets, and current Dasha period.
+              Generate your free Kundli to see how each transiting planet interacts with
+              your personal Lagna, natal planets, and current Dasha period.
             </p>
-            <Link href="/signup" className="cta-btn">Get your personalised transit reading →</Link>
-            <p className="cta-sub">Free 30-day trial · No credit card needed</p>
+            <Link href="/" className="cta-btn">Generate your free Kundli →</Link>
           </div>
         </div>
       </div>
@@ -465,11 +464,6 @@ const TransitsPage: NextPage = () => {
 
         .cta-btn:hover { opacity: 0.88; }
 
-        .cta-sub {
-          font-size: 12px;
-          color: rgba(255,255,255,0.45);
-          margin: 12px 0 0;
-        }
 
         @media (max-width: 720px) {
           .planet-grid { grid-template-columns: 1fr; }

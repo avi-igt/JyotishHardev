@@ -129,12 +129,10 @@ const DailyPage: NextPage = () => {
                 <h2 className="cta-heading">What does this mean for your chart?</h2>
                 <p className="cta-body">
                   These planetary energies interact differently with each person's birth chart.
-                  See exactly how today's Panchang affects your Lagna, Dasha, and current transits.
+                  Generate your free Kundli to see how today's Panchang affects your Lagna and Dasha.
                 </p>
                 <div className="cta-links">
-                  <Link href="/login" className="cta-link-gold">Sign in to find out →</Link>
-                  <span className="cta-sep">or</span>
-                  <Link href="/" className="cta-link-plain">generate your free Kundli →</Link>
+                  <Link href="/" className="cta-link-gold">Generate your free Kundli →</Link>
                 </div>
               </div>
             </>
@@ -330,19 +328,6 @@ const DailyPage: NextPage = () => {
         }
 
         .cta-link-gold:hover { text-decoration: underline; }
-
-        .cta-sep {
-          color: rgba(255,255,255,0.4);
-          font-size: 14px;
-        }
-
-        .cta-link-plain {
-          color: rgba(255,255,255,0.7);
-          text-decoration: none;
-          font-size: 14px;
-        }
-
-        .cta-link-plain:hover { text-decoration: underline; color: #ffffff; }
 
         @media (max-width: 480px) {
           .fact-grid { grid-template-columns: 1fr 1fr; }
