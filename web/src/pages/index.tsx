@@ -6,7 +6,6 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
-import { api } from '@/lib/api';
 import PublicNav from '@/components/PublicNav';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -214,10 +213,19 @@ const HomePage: NextPage = () => {
     setAiLoading(true);
     setAiError('');
     try {
-      const data = await api.interpretKundli(result);
-      setAiResult(data);
+      const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+      const res = await fetch(`${apiBase}/api/v1/kundli/interpret`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(result),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.detail ?? 'Could not generate reading. Please try again.');
+      }
+      setAiResult(await res.json());
     } catch (err: any) {
-      setAiError(err.detail ?? 'Could not generate reading. Please try again.');
+      setAiError(err.message ?? 'Could not generate reading. Please try again.');
     } finally {
       setAiLoading(false);
     }
@@ -545,17 +553,6 @@ const HomePage: NextPage = () => {
                 );
               })()}
 
-              <div className="cta-section">
-                <div className="cta-card">
-                  <div className="cta-icon">🔮</div>
-                  <h3 className="cta-heading">Want predictions that remember you over time?</h3>
-                  <p className="cta-body">
-                    The JyotishHardev app builds a 20-year milestone timeline, remembers every
-                    session, and tracks which predictions actually come true.
-                  </p>
-                  <Link href="/about" className="cta-btn">Learn about persistent predictions →</Link>
-                </div>
-              </div>
 
               <button className="try-again-btn" onClick={() => { setResult(null); setError(''); }}>
                 ← Generate another Kundli

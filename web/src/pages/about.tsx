@@ -113,14 +113,14 @@ const AboutPage: NextPage = () => {
           </div>
 
           {/* CTA */}
-          <Link href="/signup" style={{
+          <Link href="/" style={{
             display: 'inline-block',
             background: '#c9a84c', color: '#1b1f4a',
             fontWeight: 700, fontSize: 15,
             padding: '14px 36px', borderRadius: 28,
             textDecoration: 'none',
           }}>
-            Begin your reading
+            Generate your free Kundli →
           </Link>
 
         </div>

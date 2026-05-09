@@ -292,13 +292,12 @@ const RashiPage: NextPage<PageProps> = ({ rashi, prevRashi, nextRashi }) => {
 
           {/* CTA */}
           <div className="cta-card">
-            <h2 className="cta-heading">See your full {rashi.name} reading →</h2>
+            <h2 className="cta-heading">Get your free Kundli reading →</h2>
             <p className="cta-body">
-              Your Sun sign is just one piece of the cosmic picture. Hardev analyses your complete Vedic chart —
-              Lagna, Moon sign, Dasha, and transits — for a reading that speaks to your exact life.
+              Your Rashi is just one piece of the picture. Generate your free Vedic birth chart
+              and get a complete reading — Lagna, Nakshatra, Dasha, and planetary positions.
             </p>
-            <Link href="/signup" className="cta-btn">Get your full Rashi reading</Link>
-            <p className="cta-sub">Free 30-day trial · No credit card needed</p>
+            <Link href="/" className="cta-btn">Generate free Kundli</Link>
           </div>
 
           {/* Prev / Next */}
@@ -504,11 +503,6 @@ const RashiPage: NextPage<PageProps> = ({ rashi, prevRashi, nextRashi }) => {
 
         .cta-btn:hover { opacity: 0.88; }
 
-        .cta-sub {
-          font-size: 12px;
-          color: rgba(255,255,255,0.4);
-          margin: 10px 0 0;
-        }
 
         /* Prev / Next */
         .nav-row {

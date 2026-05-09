@@ -743,17 +743,17 @@ const TilVicharPage: NextPage = () => {
               See How Your Moles Connect to Your Chart
             </h2>
             <p style={{ fontSize: 15, color: C.textMid, lineHeight: 1.7, marginBottom: 28 }}>
-              Til Vichar becomes most powerful when read alongside your birth chart. Get a personalised reading that integrates both.
+              Til Vichar becomes most powerful when read alongside your birth chart. Generate your free Kundli to see both together.
             </p>
             <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-              <Link href="/signup" style={{
+              <Link href="/" style={{
                 display: 'inline-block',
                 background: C.rose, color: C.white,
                 fontWeight: 700, fontSize: 15,
                 padding: '13px 32px', borderRadius: 28,
                 textDecoration: 'none',
               }}>
-                Begin your reading
+                Generate free Kundli →
               </Link>
               <Link href="/palmistry" style={{
                 display: 'inline-block',
