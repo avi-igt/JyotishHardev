@@ -510,11 +510,17 @@ const NakshatraPage: NextPage<PageProps> = ({ nakshatra, prevNakshatra, nextNaks
     <>
       <Head>
         <title>{nakshatra.name} Nakshatra — Meaning, Traits & Compatibility · JyotishHardev</title>
-        <meta
-          name="description"
-          content={`${nakshatra.name} nakshatra — ruled by ${nakshatra.ruling_planet}, deity ${nakshatra.deity}. Symbol: ${nakshatra.symbol}. ${nakshatra.general}`}
-        />
+        <meta name="description" content={`${nakshatra.name} nakshatra — ruled by ${nakshatra.ruling_planet}, deity ${nakshatra.deity}. Symbol: ${nakshatra.symbol}. ${nakshatra.general}`} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="canonical" href={`https://jyotishhardev.com/nakshatras/${nakshatra.name.toLowerCase().replace(/\s+/g, '-')}`} />
+        <meta property="og:type" content="article" />
+        <meta property="og:site_name" content="JyotishHardev" />
+        <meta property="og:url" content={`https://jyotishhardev.com/nakshatras/${nakshatra.name.toLowerCase().replace(/\s+/g, '-')}`} />
+        <meta property="og:title" content={`${nakshatra.name} Nakshatra — Meaning, Traits & Compatibility · JyotishHardev`} />
+        <meta property="og:description" content={`${nakshatra.name} nakshatra — ruled by ${nakshatra.ruling_planet}, deity ${nakshatra.deity}. Symbol: ${nakshatra.symbol}. ${nakshatra.general}`} />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content={`${nakshatra.name} Nakshatra · JyotishHardev`} />
+        <meta name="twitter:description" content={`${nakshatra.name} nakshatra — ruled by ${nakshatra.ruling_planet}, deity ${nakshatra.deity}. Symbol: ${nakshatra.symbol}.`} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi:ital@0;1&display=swap"

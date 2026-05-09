@@ -402,9 +402,26 @@ const HomePage: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Free Kundli Generator · JyotishHardev — The Vedic Astrologer Who Remembers</title>
-        <meta name="description" content="Generate your Vedic birth chart instantly — free, no account needed. Get your Lagna, Rashi, Nakshatra, and personalised AI reading." />
+        <title>Free Kundli Generator · JyotishHardev — Vedic Astrology</title>
+        <meta name="description" content="Generate your Vedic birth chart instantly — free, no account needed. Get your Lagna, Rashi, Nakshatra, Dasha, and full Jyotish reading." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="canonical" href="https://jyotishhardev.com/" />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="JyotishHardev" />
+        <meta property="og:url" content="https://jyotishhardev.com/" />
+        <meta property="og:title" content="Free Kundli Generator · JyotishHardev" />
+        <meta property="og:description" content="Generate your Vedic birth chart instantly — free, no account needed. Get your Lagna, Rashi, Nakshatra, Dasha, and full Jyotish reading." />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content="Free Kundli Generator · JyotishHardev" />
+        <meta name="twitter:description" content="Generate your Vedic birth chart instantly — free, no account needed. Get your Lagna, Rashi, Nakshatra, Dasha, and full Jyotish reading." />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "JyotishHardev",
+          "url": "https://jyotishhardev.com",
+          "description": "Free Vedic astrology — instant Kundli, daily panchang, nakshatra library, and Jyotish predictions.",
+          "potentialAction": { "@type": "SearchAction", "target": "https://jyotishhardev.com/" }
+        })}} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi:ital@0;1&display=swap" rel="stylesheet" />
       </Head>

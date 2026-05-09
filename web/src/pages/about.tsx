@@ -25,8 +25,18 @@ const AboutPage: NextPage = () => {
   return (
     <>
       <Head>
-        <title>About Hardev — Jyotish Hardev</title>
+        <title>About Hardev — JyotishHardev</title>
         <meta name="description" content="My name is Hardev. I'm here to help you listen to what the stars have always been speaking — through the ancient science of Jyotish." />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="canonical" href="https://jyotishhardev.com/about" />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="JyotishHardev" />
+        <meta property="og:url" content="https://jyotishhardev.com/about" />
+        <meta property="og:title" content="About Hardev — JyotishHardev" />
+        <meta property="og:description" content="My name is Hardev. I'm here to help you listen to what the stars have always been speaking — through the ancient science of Jyotish." />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content="About Hardev — JyotishHardev" />
+        <meta name="twitter:description" content="My name is Hardev. I'm here to help you listen to what the stars have always been speaking — through the ancient science of Jyotish." />
       </Head>
 
       <PublicNav activePage="about" />

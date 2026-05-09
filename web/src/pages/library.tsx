@@ -60,11 +60,17 @@ const LibraryPage: NextPage = () => {
     <>
       <Head>
         <title>Jyotish Library — Nakshatras & Rashis · JyotishHardev</title>
-        <meta
-          name="description"
-          content="Complete Vedic astrology library — all 27 Nakshatras and 12 Rashis with detailed descriptions, ruling planets, deities, traits, and compatibility."
-        />
+        <meta name="description" content="Complete Vedic astrology library — all 27 Nakshatras and 12 Rashis with detailed descriptions, ruling planets, deities, traits, and compatibility." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="canonical" href="https://jyotishhardev.com/library" />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="JyotishHardev" />
+        <meta property="og:url" content="https://jyotishhardev.com/library" />
+        <meta property="og:title" content="Jyotish Library — Nakshatras & Rashis · JyotishHardev" />
+        <meta property="og:description" content="Complete Vedic astrology library — all 27 Nakshatras and 12 Rashis with detailed descriptions, ruling planets, deities, traits, and compatibility." />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content="Jyotish Library — Nakshatras & Rashis · JyotishHardev" />
+        <meta name="twitter:description" content="Complete Vedic astrology library — all 27 Nakshatras and 12 Rashis with detailed descriptions, ruling planets, deities, traits, and compatibility." />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi:ital@0;1&display=swap"

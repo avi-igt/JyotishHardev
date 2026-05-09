@@ -230,11 +230,17 @@ const RashiPage: NextPage<PageProps> = ({ rashi, prevRashi, nextRashi }) => {
     <>
       <Head>
         <title>{rashi.name} Rashi — Meaning, Traits & Astrology · JyotishHardev</title>
-        <meta
-          name="description"
-          content={`${rashi.name} (${rashi.symbol}) — ${rashi.element} sign ruled by ${rashi.ruling_planet}. ${rashi.general}`}
-        />
+        <meta name="description" content={`${rashi.name} (${rashi.symbol}) — ${rashi.element} sign ruled by ${rashi.ruling_planet}. ${rashi.general}`} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="canonical" href={`https://jyotishhardev.com/rashis/${rashi.name.toLowerCase()}`} />
+        <meta property="og:type" content="article" />
+        <meta property="og:site_name" content="JyotishHardev" />
+        <meta property="og:url" content={`https://jyotishhardev.com/rashis/${rashi.name.toLowerCase()}`} />
+        <meta property="og:title" content={`${rashi.name} Rashi — Meaning, Traits & Astrology · JyotishHardev`} />
+        <meta property="og:description" content={`${rashi.name} (${rashi.symbol}) — ${rashi.element} sign ruled by ${rashi.ruling_planet}. ${rashi.general}`} />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content={`${rashi.name} Rashi · JyotishHardev`} />
+        <meta name="twitter:description" content={`${rashi.name} (${rashi.symbol}) — ${rashi.element} sign ruled by ${rashi.ruling_planet}. ${rashi.general}`} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi:ital@0;1&display=swap"
