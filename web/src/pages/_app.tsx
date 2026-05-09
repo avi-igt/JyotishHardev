@@ -1,45 +1,7 @@
 import type { AppProps } from 'next/app';
-import { createContext, useContext, useEffect, useState } from 'react';
-import type { Session } from '@supabase/supabase-js';
-import { supabase } from '@/lib/supabase';
-import { useRouter } from 'next/router';
-
-interface AuthContext {
-  session: Session | null;
-  loading: boolean;
-}
-
-const AuthCtx = createContext<AuthContext>({ session: null, loading: true });
-export const useAuth = () => useContext(AuthCtx);
-
-const PUBLIC_ROUTES = ['/', '/login', '/signup', '/share', '/daily', '/transits', '/library', '/predictions', '/nakshatras', '/rashis', '/kundli', '/about', '/palmistry', '/til-vichar'];
 
 export default function App({ Component, pageProps }: AppProps) {
-  const [session, setSession] = useState<Session | null>(null);
-  const [loading, setLoading] = useState(true);
-  const router = useRouter();
-
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session);
-      setLoading(false);
-    });
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-    return () => listener.subscription.unsubscribe();
-  }, []);
-
-  useEffect(() => {
-    if (loading) return;
-    const isPublic = PUBLIC_ROUTES.some(
-      (r) => router.pathname === r || router.pathname.startsWith(r + '/')
-    );
-    if (!session && !isPublic) router.push('/login');
-  }, [session, loading, router.pathname]);
-
   return (
-    <AuthCtx.Provider value={{ session, loading }}>
       <>
         <style jsx global>{`
           *,
@@ -74,6 +36,5 @@ export default function App({ Component, pageProps }: AppProps) {
         `}</style>
         <Component {...pageProps} />
       </>
-    </AuthCtx.Provider>
   );
 }

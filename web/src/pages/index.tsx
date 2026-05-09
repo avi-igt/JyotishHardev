@@ -8,10 +8,7 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/router';
-import { supabase } from '@/lib/supabase';
 import { api } from '@/lib/api';
-import { useAuth } from './_app';
 import PublicNav from '@/components/PublicNav';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -190,9 +187,6 @@ declare global {
 const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
 const HomePage: NextPage = () => {
-  const { session, loading: authLoading } = useAuth();
-  const router = useRouter();
-
   const [name, setName] = useState('');
   const [day, setDay] = useState('');
   const [month, setMonth] = useState('');
@@ -213,32 +207,9 @@ const HomePage: NextPage = () => {
   const [aiLoading, setAiLoading] = useState(false);
   const [aiResult, setAiResult] = useState<{ personality: string; career: string; finances: string; family: string; health: string } | null>(null);
   const [aiError, setAiError] = useState('');
-  const [userStatus, setUserStatus] = useState<'guest' | 'active' | 'expired'>('guest');
 
   const pobRef = useRef<HTMLInputElement>(null);
   const autocompleteRef = useRef<any>(null);
-
-  // Redirect logged-in users to dashboard
-  useEffect(() => {
-    if (!authLoading && session) {
-      router.push('/dashboard');
-    }
-  }, [session, authLoading, router]);
-
-  // Check auth + subscription status for AI feature
-  useEffect(() => {
-    supabase.auth.getSession().then(async ({ data }) => {
-      if (!data.session) { setUserStatus('guest'); return; }
-      try {
-        const me = await api.getMe();
-        const now = new Date();
-        const trialActive = new Date(me.profile.trial_expires_at) > now;
-        setUserStatus(me.profile.subscription_active || trialActive ? 'active' : 'expired');
-      } catch {
-        setUserStatus('guest');
-      }
-    });
-  }, []);
 
   const handleAiInterpret = async () => {
     if (!result) return;
@@ -248,7 +219,7 @@ const HomePage: NextPage = () => {
       const data = await api.interpretKundli(result);
       setAiResult(data);
     } catch (err: any) {
-      setAiError(err.status === 402 ? 'upgrade' : (err.detail ?? 'Could not generate reading. Please try again.'));
+      setAiError(err.detail ?? 'Could not generate reading. Please try again.');
     } finally {
       setAiLoading(false);
     }
@@ -258,7 +229,6 @@ const HomePage: NextPage = () => {
   // Handles both first load (script not yet present) and client-side
   // navigation back to this page (script already in DOM, API already loaded).
   useEffect(() => {
-    if (authLoading) return; // form not rendered yet
     if (!pobRef.current) return;
 
     const key = process.env.NEXT_PUBLIC_GOOGLE_PLACES_KEY;
@@ -301,7 +271,7 @@ const HomePage: NextPage = () => {
         document.head.appendChild(script);
       }
     }
-  }, [authLoading]);
+  }, []);
 
   const canSubmit = name.trim() && day && month && year && pob && pobLat !== null && pobLon !== null && pobTzOffset !== null && !loading;
 
@@ -359,15 +329,6 @@ const HomePage: NextPage = () => {
   const days = Array.from({ length: 31 }, (_, i) => i + 1);
   const hours = Array.from({ length: 12 }, (_, i) => i + 1);
   const minutes = Array.from({ length: 60 }, (_, i) => String(i).padStart(2, '0'));
-
-  if (authLoading) {
-    return (
-      <div style={{ minHeight: '100vh', background: '#F5F0E8', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ width: 32, height: 32, border: '3px solid #E8E2D9', borderTopColor: '#1B1F4A', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
-        <style jsx global>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-      </div>
-    );
-  }
 
   return (
     <>
@@ -574,20 +535,11 @@ const HomePage: NextPage = () => {
                         <div className="ai-banner-title">✦ Get your personalised AI reading</div>
                         <div className="ai-banner-sub">Hardev analyses your exact planetary positions and speaks directly to your chart.</div>
                       </div>
-                      {userStatus === 'guest' && <Link href="/signup" className="ai-banner-btn">Sign up free →</Link>}
-                      {userStatus === 'active' && (
-                        <button className="ai-banner-btn" onClick={handleAiInterpret} disabled={aiLoading}>
-                          {aiLoading ? 'Reading…' : 'Get reading →'}
-                        </button>
-                      )}
-                      {userStatus === 'expired' && <Link href="/account" className="ai-banner-btn">Upgrade →</Link>}
+                      <button className="ai-banner-btn" onClick={handleAiInterpret} disabled={aiLoading}>
+                        {aiLoading ? 'Reading…' : 'Get reading →'}
+                      </button>
                     </div>
-                    {aiError && aiError !== 'upgrade' && <div className="error-box" style={{ marginBottom: 16 }}>{aiError}</div>}
-                    {aiError === 'upgrade' && (
-                      <div className="error-box" style={{ marginBottom: 16 }}>
-                        Your trial has ended. <Link href="/account" style={{ color: '#1b1f4a', fontWeight: 600 }}>Upgrade to continue →</Link>
-                      </div>
-                    )}
+                    {aiError && <div className="error-box" style={{ marginBottom: 16 }}>{aiError}</div>}
                   </>
                 );
               })()}
@@ -595,13 +547,12 @@ const HomePage: NextPage = () => {
               <div className="cta-section">
                 <div className="cta-card">
                   <div className="cta-icon">🔮</div>
-                  <h3 className="cta-heading">Your full interpretation is waiting</h3>
+                  <h3 className="cta-heading">Want predictions that remember you over time?</h3>
                   <p className="cta-body">
-                    Get milestone predictions for the next 20 years, a persistent astrologer who
-                    remembers every session, and a track record that builds over time.
+                    The JyotishHardev app builds a 20-year milestone timeline, remembers every
+                    session, and tracks which predictions actually come true.
                   </p>
-                  <Link href="/signup" className="cta-btn">Get your full reading — free →</Link>
-                  <p className="cta-sub">30-day trial · No credit card needed</p>
+                  <Link href="/about" className="cta-btn">Learn about persistent predictions →</Link>
                 </div>
               </div>
 

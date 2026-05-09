@@ -57,14 +57,6 @@ export default function PublicNav({ activePage }: PublicNavProps) {
               paddingBottom: 2,
             }}>{label}</Link>
           ))}
-          <Link href="/login" style={{ fontSize: 14, color: '#c9a84c', textDecoration: 'none', fontWeight: 500 }}>
-            Sign in
-          </Link>
-          <Link href="/signup" style={{
-            fontSize: 13, fontWeight: 600, color: '#1b1f4a',
-            background: '#c9a84c', padding: '7px 16px',
-            borderRadius: 20, textDecoration: 'none',
-          }}>Get started</Link>
         </nav>
 
         {/* Mobile hamburger */}
@@ -101,14 +93,6 @@ export default function PublicNav({ activePage }: PublicNavProps) {
               color: activePage === key ? '#c9a84c' : 'rgba(255,255,255,0.85)',
             }}>{label}</Link>
           ))}
-          <Link href="/login" onClick={() => setMenuOpen(false)} style={{
-            fontSize: 15, color: '#c9a84c', textDecoration: 'none', fontWeight: 500,
-          }}>Sign in</Link>
-          <Link href="/signup" onClick={() => setMenuOpen(false)} style={{
-            fontSize: 15, fontWeight: 700, color: '#1b1f4a',
-            background: '#c9a84c', padding: '10px 20px',
-            borderRadius: 20, textDecoration: 'none', textAlign: 'center',
-          }}>Get started free</Link>
         </div>
       )}
 

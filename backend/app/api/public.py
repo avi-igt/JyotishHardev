@@ -8,14 +8,10 @@ from typing import Optional
 
 import swisseph as swe
 import anthropic
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, HTTPException, status
 from pydantic import BaseModel
-from sqlalchemy.orm import Session
 
-from app.core.auth import get_current_user
 from app.core.config import settings
-from app.core.db import get_db
-from app.models.profile import Profile
 from app.services.chart import compute_chart, compute_vimshottari_dasha
 from app.services.classifier import classify, ClassifierError, FALLBACK_MESSAGE
 
@@ -267,29 +263,13 @@ def compute_public_kundli(body: PublicKundliRequest) -> PublicKundliResponse:
 
 
 @router.post("/kundli/interpret", response_model=InterpretResponse)
-def interpret_kundli(
-    body: InterpretRequest,
-    user_id: str = Depends(get_current_user),
-    db: Session = Depends(get_db),
-) -> InterpretResponse:
-    """AI-powered Kundli interpretation — trial and paid users only.
+def interpret_kundli(body: InterpretRequest) -> InterpretResponse:
+    """AI-powered Kundli interpretation — free for all, no auth required.
 
     Calls Claude to generate personalised sections for personality,
     career, finances, family, and health. Response passes through
     the classifier to ensure safe framing.
     """
-    profile = db.query(Profile).filter(Profile.id == user_id).first()
-    if not profile:
-        raise HTTPException(status_code=404, detail="Profile not found.")
-
-    now = datetime.utcnow()
-    trial_active = now < profile.trial_expires_at
-    if not trial_active and not profile.subscription_active:
-        raise HTTPException(
-            status_code=status.HTTP_402_PAYMENT_REQUIRED,
-            detail="Upgrade required to access AI interpretations.",
-        )
-
     # Build chart summary for the prompt
     positions_text = "\n".join(
         f"  {planet}: {pos.sign} {pos.degree:.2f}°"

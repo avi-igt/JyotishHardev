@@ -17,7 +17,7 @@ interface PlanetTransit {
 }
 
 interface TransitsResponse {
-  transits: PlanetTransit[];
+  planets: PlanetTransit[];
   computed_at: string;
 }
 
@@ -138,8 +138,8 @@ const TransitsPage: NextPage = () => {
   }, []);
 
   // Sort transits by canonical planet order
-  const sortedTransits = data?.transits
-    ? [...data.transits].sort(
+  const sortedTransits = data?.planets
+    ? [...data.planets].sort(
         (a, b) => PLANET_ORDER.indexOf(a.planet) - PLANET_ORDER.indexOf(b.planet)
       )
     : [];
