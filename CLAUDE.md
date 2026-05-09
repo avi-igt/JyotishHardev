@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this project is
 
-JyotishHardev is a free, no-login Vedic astrology website. Visitors get an instant Kundli chart, a static reading, and an optional AI interpretation — all anonymously, with no accounts and no payments.
+JyotishHardev is a free, no-login Vedic astrology website. Visitors get an instant Kundli chart and a static Jyotish reading — all anonymously, with no accounts and no payments. There is no AI reading feature on the frontend (removed); the `/kundli/interpret` backend endpoint still exists but is not exposed in the UI.
 
 ## Project structure
 
@@ -14,7 +14,7 @@ JyotishHardev/
 │   ├── app/
 │   │   ├── api/      # public.py (kundli, panchang, AI reading, predictions)
 │   │   │             # transits.py (current planetary positions)
-│   │   ├── core/     # config.py (ANTHROPIC_API_KEY only)
+│   │   ├── core/     # config.py (ANTHROPIC_API_KEY only), limiter.py (slowapi rate limiter)
 │   │   └── services/ # chart.py (pyswisseph math), classifier.py (safe framing)
 │   └── tests/
 ├── mobile/           # React Native (Expo) — not actively maintained
@@ -98,8 +98,23 @@ The backend uses `allow_origins=["*"]` with `allow_credentials=False`. Since the
 
 The PostToolUse:Edit hook reports `next/head` as an "error" on every `.tsx` file. This is a **false positive** — the project uses Next.js Pages Router, where `next/head` is correct. The `"use client"` suggestions are also wrong for Pages Router. Ignore all of these.
 
+## Homepage results page
+
+After a Kundli is generated, the results show:
+- Lagna, Moon sign, Nakshatra, current Dasha
+- Static Vedic profile (personality traits, career, finances, family, health) from `LAGNA_DATA`
+- Lucky numbers, colour, and day from `NAKSHATRA_LUCKY`
+- Three action buttons: **← New Kundli**, **Share ↗** (copies URL with encoded birth params), **Email ↗** (mailto with chart summary)
+
+The Share URL encodes all birth details as query params (`?share=1&...`). On page load, a `useEffect` detects `share=1`, pre-fills the form, and auto-submits via `submitKundliWith()` — bypassing React state timing by accepting explicit values rather than reading from state.
+
+## SEO
+
+All pages have OG tags, Twitter card tags, and canonical URLs. `sitemap.xml` is a server-rendered page at `/src/pages/sitemap.xml.tsx` covering all 41 URLs. `robots.txt` is at `/public/robots.txt`. The sitemap must be submitted to Google Search Console manually.
+
 ## Known open issues
 
-- `/kundli/interpret` rate-limited to 10 req/hour per IP via slowapi (in-memory, resets on restart)
+- `/kundli/interpret` rate-limited to 10 req/hour per IP via slowapi (in-memory, resets on restart); model is `claude-sonnet-4-6`
 - Jaimini Chara Dasha not implemented (users always get Vimshottari)
 - Google Places Autocomplete uses the deprecated `Autocomplete` widget (still functional)
+- No OG image — social share previews show text only; adding a static OG image would improve click-through
