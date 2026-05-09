@@ -250,7 +250,7 @@ const HomePage: NextPage = () => {
         if (!place.geometry) return;
         const lat = place.geometry.location.lat();
         const lng = place.geometry.location.lng();
-        setPob(place.name ?? place.formatted_address ?? '');
+        setPob(place.formatted_address ?? place.name ?? '');
         setPobLat(lat);
         setPobLon(lng);
         try {
