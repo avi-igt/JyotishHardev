@@ -370,7 +370,7 @@ const HomePage: NextPage = () => {
                   type="text"
                   value={name}
                   onChange={e => setName(e.target.value)}
-                  placeholder="e.g. Prisha Singh"
+                  placeholder="e.g. Lalita Devi"
                   required
                   autoFocus
                 />
