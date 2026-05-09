@@ -951,12 +951,12 @@ const PalmistryPage: NextPage = () => {
         {/* Header */}
         <div style={{ background: C.surface, borderBottom: `1px solid ${C.border}`, padding: '40px 24px 0' }}>
           <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-            <p style={{ fontSize: 12, color: C.goldDim, letterSpacing: '1.6px', textTransform: 'uppercase', marginBottom: 10 }}>
+            <p style={{ fontSize: 12, fontWeight: 600, color: '#6b6b8a', letterSpacing: '1.6px', textTransform: 'uppercase', marginBottom: 10 }}>
               Hasta Samudrika Shastra
             </p>
             <h1 style={{
               fontFamily: "'Tiro Devanagari Hindi', Georgia, serif",
-              fontSize: 34, fontWeight: 700, color: '#ffffff',
+              fontSize: 34, fontWeight: 700, color: '#1b1f4a',
               marginBottom: 10, lineHeight: 1.2,
             }}>
               Palmistry Reference
