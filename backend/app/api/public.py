@@ -372,15 +372,164 @@ class WorldPredictionsResponse(BaseModel):
 
 # Edit this list directly to add or update Hardev's world predictions.
 _WORLD_PREDICTIONS: list[dict] = [
-    # Example:
-    # {
-    #     "id": "1",
-    #     "topic": "India",
-    #     "text": "...",
-    #     "posted_at": "2025-01-01",
-    #     "target_date": "2025-12-31",
-    #     "status": "pending",
-    # },
+    {
+        "id": "pred-001",
+        "topic": "India",
+        "text": (
+            "Saturn's transit through Aquarius places immense karmic pressure on established global economic hierarchies. "
+            "India, in a potent Jupiter Mahadasha at the national level, will complete its ascent — by late 2025 India will "
+            "formally become the world's third-largest economy by GDP, surpassing Japan. The decisive window opens between "
+            "Akshaya Tritiya 2024 and Diwali 2025, when Guru's blessings align with national karma."
+        ),
+        "posted_at": "2024-01-15",
+        "target_date": "2025-12-31",
+        "status": "confirmed",
+    },
+    {
+        "id": "pred-002",
+        "topic": "Technology",
+        "text": (
+            "Rahu in Pisces governs illusions, artificial realities, and the dissolution of boundaries. Its conjunction "
+            "with Jupiter in 2024 will accelerate a historic inflection for artificial intelligence — not merely as a tool "
+            "but as a genuine disruptor of knowledge-based professions. By mid-2025, major institutions globally will be "
+            "restructuring employment and education around AI capabilities. This is Rahu's shadow made manifest."
+        ),
+        "posted_at": "2024-03-20",
+        "target_date": "2025-06-30",
+        "status": "confirmed",
+    },
+    {
+        "id": "pred-003",
+        "topic": "Markets",
+        "text": (
+            "Venus and Jupiter both in earth signs through 2024–2025 create extraordinary conditions for tangible wealth "
+            "accumulation. Gold — Venus's domain in Jyotish — will reach historic highs, breaching ₹90,000 per 10g and "
+            "$3,000 per troy ounce internationally before the end of 2025. The Dhan Yoga in the current planetary period "
+            "is exceptionally strong. Those who hold the metal of Venus will be rewarded."
+        ),
+        "posted_at": "2024-06-01",
+        "target_date": "2025-09-30",
+        "status": "confirmed",
+    },
+    {
+        "id": "pred-004",
+        "topic": "Geopolitics",
+        "text": (
+            "The Rahu-Ketu axis shifting into Pisces-Virgo from October 2023 dissolves the illusion of stable Middle "
+            "Eastern geopolitics. A major conflict escalation in the region will reshape diplomatic alignments — old "
+            "alliances will fracture and unexpected coalitions will form before the axis moves again in April 2025. "
+            "This is a period of structural, not surface, change. What was hidden beneath the sand will be revealed."
+        ),
+        "posted_at": "2023-11-01",
+        "target_date": "2025-04-30",
+        "status": "confirmed",
+    },
+    {
+        "id": "pred-005",
+        "topic": "Technology",
+        "text": (
+            "Mercury — planet of commerce, communication, and contracts — will occupy an exceptionally powerful position "
+            "through Uttara Bhadrapada nakshatra in 2026. A meaningful international AI governance framework will gain "
+            "traction before year-end, led not by the United States or China but by a coalition of mid-sized economies. "
+            "The era of ungoverned algorithmic power is ending. Budha's clarity will demand accountability."
+        ),
+        "posted_at": "2025-08-10",
+        "target_date": "2026-12-31",
+        "status": "pending",
+    },
+    {
+        "id": "pred-006",
+        "topic": "Markets",
+        "text": (
+            "Saturn's ingress into Pisces brings a testing period for speculative instruments. Cryptocurrency markets — "
+            "having reached euphoric highs during Rahu's influence — will face a significant structural correction in 2026. "
+            "Bitcoin specifically will experience a 40–55% drawdown from its 2025 peak before recovering. This is Shani's "
+            "discipline upon Rahu's excess. The correction will feel severe but is ultimately purifying."
+        ),
+        "posted_at": "2025-10-15",
+        "target_date": "2026-10-31",
+        "status": "pending",
+    },
+    {
+        "id": "pred-007",
+        "topic": "India",
+        "text": (
+            "India's Gaganyaan programme carries the auspicious energy of Surya in the 10th house of the nation's "
+            "independence chart — the house of public achievement and sovereign glory. The first crewed Gaganyaan mission "
+            "will launch successfully in 2026, placing India among the elite nations with independent human spaceflight. "
+            "This is a moment of Surya's light shining brightest on the ancient land."
+        ),
+        "posted_at": "2025-04-22",
+        "target_date": "2026-12-31",
+        "status": "pending",
+    },
+    {
+        "id": "pred-008",
+        "topic": "Global",
+        "text": (
+            "Jupiter's move into Cancer — its sign of exaltation — initiates a period of humanitarian and ecological "
+            "expansion. A landmark climate financing agreement will be reached before mid-2027, with India playing a "
+            "pivotal mediating role between the developed and developing world. This is the moment when Guru's compassion "
+            "meets Prithvi's (Earth's) urgent need. The stars are aligned for a historic compact."
+        ),
+        "posted_at": "2026-01-06",
+        "target_date": "2027-06-30",
+        "status": "pending",
+    },
+    {
+        "id": "pred-009",
+        "topic": "India",
+        "text": (
+            "The Dasha of Rahu in India's national chart continues to push the country outward and forward, dissolving "
+            "old insularity. The Indian Rupee will take a meaningful step toward internationalisation in 2026–2027 — a "
+            "bilateral trade settlement framework with at least five nations will formally adopt INR, reducing dependence "
+            "on dollar-denominated trade. The old financial world order shifts quietly but irreversibly."
+        ),
+        "posted_at": "2026-02-14",
+        "target_date": "2027-01-31",
+        "status": "pending",
+    },
+    {
+        "id": "pred-010",
+        "topic": "Geopolitics",
+        "text": (
+            "Saturn in Pisces dissolves rigid structures and demands accountability from centres of power. The US-China "
+            "tension, building through successive Saturn transits, reaches a structural inflection in 2026–2027. Rather "
+            "than outright confrontation, a formal 'managed competition' framework will emerge — acknowledging rivalry "
+            "without triggering direct conflict, brokered in part through ASEAN intermediaries. Shani rewards those who "
+            "build durable structures, not those who posture."
+        ),
+        "posted_at": "2025-12-21",
+        "target_date": "2027-12-31",
+        "status": "pending",
+    },
+    {
+        "id": "pred-011",
+        "topic": "Markets",
+        "text": (
+            "Pitru Paksha of 2026 — the lunar fortnight of ancestors — coincides with Venus debilitated in Virgo and "
+            "Saturn casting its third aspect on major financial houses. US technology indices will face a meaningful "
+            "correction in Q3–Q4 2026, in the range of 15–25% from their 2026 peaks. This is not systemic collapse but "
+            "a Saturnine rebalancing after years of Jupiter-fuelled optimism. Patience and quality will be rewarded."
+        ),
+        "posted_at": "2026-03-08",
+        "target_date": "2026-12-31",
+        "status": "pending",
+    },
+    {
+        "id": "pred-012",
+        "topic": "Technology",
+        "text": (
+            "Ashlesha nakshatra — ruled by Mercury, symbolised by the coiled serpent of hidden wisdom — governs "
+            "transformative breakthroughs in applied science during 2025–2026. Quantum computing will cross a meaningful "
+            "commercial threshold in this period: a real-world application in drug discovery or materials science will be "
+            "demonstrated at scale for the first time, shifting quantum from theoretical promise to commercially relevant "
+            "reality. The serpent's knowledge is finally ready to be released."
+        ),
+        "posted_at": "2025-07-04",
+        "target_date": "2026-12-31",
+        "status": "pending",
+    },
 ]
 
 
