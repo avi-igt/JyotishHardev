@@ -19,7 +19,7 @@ const C = {
   crimson:  '#9b2335',
   crimsonD: 'rgba(155,35,53,0.1)',
   text:     '#1a1a2e',
-  muted:    '#6b6b8a',
+  muted:    '#3a3a5c',
   faint:    'rgba(27,31,74,0.35)',
 };
 
