@@ -116,6 +116,19 @@ The Share URL encodes all birth details as query params (`?share=1&...`). On pag
 
 All pages have OG tags, Twitter card tags, and canonical URLs. `sitemap.xml` is a server-rendered page at `/src/pages/sitemap.xml.tsx` covering all 41 URLs. `robots.txt` is at `/public/robots.txt`. The sitemap must be submitted to Google Search Console manually.
 
+## Favicon and OG image
+
+- `web/public/favicon.svg` — Vedic wheel, primary favicon (modern browsers)
+- `web/public/favicon-16x16.png`, `favicon-32x32.png`, `favicon-192x192.png`, `favicon-512x512.png` — Om symbol, PNG fallbacks
+- `web/public/og-image.png` — 1200×630 branded card (indigo background, gold Cormorant Garamond type)
+- All wired in `_document.tsx`; `og:image` and `twitter:card: summary_large_image` set globally there
+
+Source files for regenerating these assets are in `mobile/assets/` and `mobile/assets/og-image-jyotishhardev.png`. The generator HTML is at `/Users/aps/Downloads/jyotishhardev-og-favicon.html`.
+
+## Vercel deployment note
+
+Vercel Deployment Protection must be set to **"Only Preview Deployments"** (not "All Deployments"). If set to "All Deployments", the production site requires Vercel login, which blocks Facebook/Google scrapers and returns 403.
+
 ## Known open issues
 
 - `/kundli/interpret` rate-limited to 10 req/hour per IP via slowapi (in-memory, resets on restart); model is `claude-sonnet-4-6`
